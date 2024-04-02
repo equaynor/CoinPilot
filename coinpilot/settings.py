@@ -58,6 +58,9 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'crispy_forms',
+    'crispy_bootstrap5',
+    'django_bootstrap5',
 ]
 
 SITE_ID = 1
@@ -93,6 +96,9 @@ TEMPLATES = [
         },
     },
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 WSGI_APPLICATION = 'coinpilot.wsgi.application'
 
