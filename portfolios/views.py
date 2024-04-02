@@ -3,5 +3,5 @@ from django.http import HttpResponse
 
 # Create your views here.
 
-def my_portfolio(request):
-    return HttpResponse("Hello, Portfolio!")
+def home_view(request):
+    return render(request, 'portfolios/home.html')
