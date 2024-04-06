@@ -41,6 +41,41 @@ body {
     border-color: #644f66;
 }
 
+.signup-form-container {
+    background-color: #1D1A24;
+    color: #F8F7F7;
+}
+
+.signup-form-container .form-control {
+    background-color: #1D1A24;
+    color: #F8F7F7;
+    border: 1px solid #868B94;
+}
+
+.signup-form-container .form-control:focus {
+    background-color: #1D1A24;
+    color: #F8F7F7;
+    border-color: #79627B;
+    box-shadow: 0 0 0 0.25rem rgba(121, 98, 123, 0.25);
+}
+
+.signup-link {
+    color: #79627B;
+    text-decoration: none;
+}
+
+.signup-link:hover {
+    color: #79627B;
+    text-decoration: underline;
+}
+
+.auth-bg-image {
+    background-image: url('https://res.cloudinary.com/dqodpxmad/image/upload/v1712415050/login_bg_c6wc8x.jpg');
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+}
+
 footer {
     background-color: #1D1A24;
     color: #F8F7F7;
