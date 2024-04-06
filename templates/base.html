@@ -29,9 +29,9 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
-<body class="d-flex flex-column min-vh-100" style="background-color: #f8f9fa; color: #212529;">
-    <header class="fixed-top bg-white shadow-sm">
-        <nav class="navbar navbar-expand-lg navbar-light bg-white">
+<body class="d-flex flex-column min-vh-100">
+    <header class="fixed-top shadow-sm">
+        <nav class="navbar navbar-expand-lg">
             <div class="container">
                 <a class="navbar-brand" href="#">CoinPilot</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -71,6 +71,7 @@
             </div>
         </nav>
     </header>
+    ...
 
     <main class="flex-grow-1">
         {% block content %}
@@ -78,7 +79,7 @@
         {% endblock %}
     </main>
 
-    <footer class="bg-white py-3 mt-auto">
+    <footer class="py-3 mt-auto">
         <div class="container">
             <p class="text-center mb-0">© CoinPilot {% now "Y" %}</p>
         </div>

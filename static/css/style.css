@@ -1,0 +1,47 @@
+/* style.css */
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #F8F7F7;
+    color: #1D1A24;
+}
+
+.navbar {
+    background-color: #1D1A24;
+}
+
+.navbar-brand {
+    color: #F8F7F7;
+}
+
+.navbar-brand:hover {
+    color: #868B94;
+}
+
+.navbar-nav .nav-link {
+    color: #F8F7F7;
+}
+
+.navbar-nav .nav-link.active {
+    color: #79627B;
+}
+
+.nav-link:hover {
+    background-color: #644f66;
+    border-color: #644f66;
+}
+
+.btn-primary {
+    background-color: #79627B;
+    border-color: #79627B;
+}
+
+.btn-primary:hover {
+    background-color: #644f66;
+    border-color: #644f66;
+}
+
+footer {
+    background-color: #1D1A24;
+    color: #F8F7F7;
+}
