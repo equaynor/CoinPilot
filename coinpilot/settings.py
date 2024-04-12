@@ -48,10 +48,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'portfolios',
-    'accounts',
-    'trades',
-    'cryptocurrency',
     'cloudinary_storage',
     'cloudinary',
     'django.contrib.sites',
@@ -61,6 +57,10 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'django_bootstrap5',
+    'portfolio',
+    'trade',
+    'coin',
+    'holding',
 ]
 
 SITE_ID = 1
