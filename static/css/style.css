@@ -46,11 +46,11 @@ body {
     color: #F8F7F7;
 }
 
-/* .signup-form-container .form-control {
+.signup-form-container .form-control {
     background-color: #1D1A24;
     color: #F8F7F7;
     border: 1px solid #868B94;
-} */
+}
 
 .signup-form-container .form-control:focus {
     background-color: #1D1A24;
@@ -70,8 +70,18 @@ body {
 }
 
 ::placeholder {
-    color: #F8F7F7;
+    color: #F8F7F7 !important;
   }
+
+.form-text {
+    color: #F8F7F7;
+}
+
+.form-text a {
+    color: #79627B !important;
+}
+
+
 
 .auth-bg-image {
     background-image: url('https://res.cloudinary.com/dqodpxmad/image/upload/v1712415050/login_bg_c6wc8x.jpg');
