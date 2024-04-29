@@ -1,5 +1,6 @@
 from django.conf import settings
 import requests
+from requests.exceptions import HTTPError
 
 class CoinGeckoAPI:
     def __init__(self):
@@ -17,9 +18,13 @@ class CoinGeckoAPI:
             'order': 'market_cap_desc',
             'per_page': 250,
             'page': 1,
-            'sparkline': False,
-            'price_change_percentage': '24h',
+            'sparkline': 'false',
         }
-        response = requests.get(url, headers=headers, params=params)
-        response.raise_for_status()
-        return response.json()
+        try:
+            response = requests.get(url, headers=headers, params=params)
+            response.raise_for_status()
+            return response.json()
+        except HTTPError as e:
+            error_message = f"Error fetching market data from CoinGecko API: {str(e)}"
+            print(error_message)
+            return None
