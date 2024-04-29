@@ -19,6 +19,7 @@ class CoinGeckoAPI:
             'per_page': 250,
             'page': 1,
             'sparkline': 'false',
+            'price_change_percentage': '24h'
         }
         try:
             response = requests.get(url, headers=headers, params=params)
