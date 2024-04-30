@@ -18,6 +18,7 @@ if os.path.isfile('env.py'):
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+import redis
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -119,6 +120,18 @@ WSGI_APPLICATION = 'coinpilot.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
+}
+
+# Caching
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': os.environ.get('REDISCLOUD_URL'),
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
 }
 
 # Coin Data Management
