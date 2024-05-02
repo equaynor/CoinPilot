@@ -3,6 +3,7 @@ from django.db.models import F
 from apscheduler.schedulers.background import BackgroundScheduler
 from ...models import Coin
 from ...coingecko import CoinGeckoAPI
+from django.contrib.auth.models import User
 
 def update_coin_data():
     api = CoinGeckoAPI()
@@ -12,13 +13,7 @@ def update_coin_data():
         print('Failed to fetch coin data from the CoinGecko API')
         return
     else:
-        print("Type of coins_data:", type(coins_data))
-        print("Contents of coins_data:", coins_data)
-
         for coin_data in coins_data:
-            # print("Type of coin_data:", type(coin_data))
-            # print("Contents of coin_data:", coin_data)
-
             coin, created = Coin.objects.update_or_create(
                 coin_id=coin_data['id'],
                 defaults={
@@ -44,13 +39,30 @@ class Command(BaseCommand):
     help = 'Fetches and updates coin data from the CoinGecko API'
 
     def handle(self, *args, **options):
+        user = self.get_logged_in_user()
         scheduler = BackgroundScheduler()
-        scheduler.add_job(update_coin_data, 'interval', minutes=5)  # Update coin data every 1 minute
-        scheduler.start()
 
-        # Keep the script running indefinitely
-        try:
-            while True:
-                pass
-        except (KeyboardInterrupt, SystemExit):
+        if user and user.userprofile.fetch_coin_data_flag:
+            # Start the scheduler and perform the coin data fetching tasks
+            scheduler.add_job(update_coin_data, 'interval', minutes=5)  # Update coin data every 5 minutes
+            scheduler.start()
+            print('Coin data fetching started.')
+
+            # Keep the script running indefinitely
+            try:
+                while True:
+                    pass
+            except (KeyboardInterrupt, SystemExit):
+                scheduler.shutdown()
+                print('Coin data fetching stopped.')
+        else:
+            # Stop the scheduler and cleanup
             scheduler.shutdown()
+            print('Coin data fetching not started.')
+
+    def get_logged_in_user(self):
+        User = get_user_model()
+        try:
+            return User.objects.get(is_authenticated=True)
+        except User.DoesNotExist:
+            return None
