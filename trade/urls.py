@@ -3,5 +3,5 @@ from . import views
 
 urlpatterns = [
     path('add/', views.add_trade, name='add_trade'),
-    # Other URL patterns...
+    path('history/', views.trade_history, name='trade_history'),
 ]
