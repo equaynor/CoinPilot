@@ -21,3 +21,9 @@ def add_trade(request):
     else:
         form = TradeForm()
     return render(request, 'trade/add_trade.html', {'form': form})
+
+
+@login_required
+def trade_history(request):
+    trades = Trade.objects.filter(holding__portfolio=request.user.portfolio).order_by('-timestamp')
+    return render(request, 'trade/trade_history.html', {'trades': trades})
