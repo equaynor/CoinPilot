@@ -4,4 +4,4 @@ from .models import Trade
 class TradeForm(forms.ModelForm):
     class Meta:
         model = Trade
-        fields = ['holding', 'trade_type', 'quantity', 'price']
+        fields = ['coin', 'trade_type', 'quantity', 'price']
