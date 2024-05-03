@@ -1,9 +1,10 @@
+import threading
 from django.core.management.base import BaseCommand
 from django.db.models import F
 from apscheduler.schedulers.background import BackgroundScheduler
 from ...models import Coin
 from ...coingecko import CoinGeckoAPI
-from django.contrib.auth.models import User
+
 
 def update_coin_data():
     api = CoinGeckoAPI()
@@ -39,30 +40,11 @@ class Command(BaseCommand):
     help = 'Fetches and updates coin data from the CoinGecko API'
 
     def handle(self, *args, **options):
-        user = self.get_logged_in_user()
-        scheduler = BackgroundScheduler()
-
-        if user and user.userprofile.fetch_coin_data_flag:
-            # Start the scheduler and perform the coin data fetching tasks
+        def run_scheduler():
+            scheduler = BackgroundScheduler()
             scheduler.add_job(update_coin_data, 'interval', minutes=5)  # Update coin data every 5 minutes
             scheduler.start()
             print('Coin data fetching started.')
 
-            # Keep the script running indefinitely
-            try:
-                while True:
-                    pass
-            except (KeyboardInterrupt, SystemExit):
-                scheduler.shutdown()
-                print('Coin data fetching stopped.')
-        else:
-            # Stop the scheduler and cleanup
-            scheduler.shutdown()
-            print('Coin data fetching not started.')
-
-    def get_logged_in_user(self):
-        User = get_user_model()
-        try:
-            return User.objects.get(is_authenticated=True)
-        except User.DoesNotExist:
-            return None
+        # Start the scheduler in a separate thread
+        threading.Thread(target=run_scheduler).start()
