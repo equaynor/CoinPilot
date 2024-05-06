@@ -6,7 +6,7 @@ from ...models import Coin
 from ...coingecko import CoinGeckoAPI
 
 
-def update_coin_data():
+def fetch_coin_data():
     api = CoinGeckoAPI()
     coins_data = api.get_coins_markets()
 
@@ -42,7 +42,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         def run_scheduler():
             scheduler = BackgroundScheduler()
-            scheduler.add_job(update_coin_data, 'interval', minutes=5)  # Update coin data every 5 minutes
+            scheduler.add_job(fetch_coin_data, 'interval', minutes=5)  # Update coin data every 5 minutes
             scheduler.start()
             print('Coin data fetching started.')
 
