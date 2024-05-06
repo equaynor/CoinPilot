@@ -1,10 +1,34 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
   <h2>Add Trade</h2>
-  <form method="post">
+  <form method="post" id="trade-form">
     {% csrf_token %}
-    {{ form.as_p }}
+    <div>
+      <label for="id_coin">Coin:</label>
+      {{ form.coin }}
+      <span class="error" id="coin-error"></span>
+    </div>
+    <div>
+      <label for="id_trade_type">Trade Type:</label>
+      {{ form.trade_type }}
+      <span class="error" id="trade-type-error"></span>
+    </div>
+    <div>
+      <label for="id_quantity">Quantity:</label>
+      {{ form.quantity }}
+      <span class="error" id="quantity-error"></span>
+    </div>
+    <div>
+      <label for="id_price">Price:</label>
+      {{ form.price }}
+      <span class="error" id="price-error"></span>
+    </div>
     <button type="submit">Add Trade</button>
   </form>
+{% endblock %}
+
+{% block javascript %}
+  <script src="{% static 'js/trade_form.js' %}"></script>
 {% endblock %}
