@@ -1,7 +1,26 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Portfolio
 from coin.models import Coin
 from django.db.models import Q
 from django.core.cache import cache
+from django.contrib.auth.decorators import login_required
+
+
+@login_required
+def portfolio_redirect(request):
+    portfolio = Portfolio.objects.filter(user=request.user).first()
+    if portfolio:
+        return redirect('portfolio_detail', portfolio_id=portfolio.id)
+    else:
+        # Create a new portfolio for the user
+        new_portfolio = Portfolio.objects.create(user=request.user, name='My Portfolio')
+        return redirect('portfolio_detail', portfolio_id=new_portfolio.id)
+
+
+def portfolio_detail(request, portfolio_id):
+    portfolio = get_object_or_404(Portfolio, id=portfolio_id)
+    return render(request, 'portfolio/portfolio.html', {'portfolio': portfolio})
+
 
 def coin_list(request):
     query = request.GET.get('q')
