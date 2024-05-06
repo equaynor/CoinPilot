@@ -37,8 +37,8 @@ def add_trade(request, portfolio_id):
 @login_required
 def trade_history(request, portfolio_id):
     portfolio = get_object_or_404(Portfolio, id=portfolio_id, user=request.user)
-    holdings = portfolio.holding_set.all()
-    trades = Trade.objects.filter(holding__in=holdings).order_by('-date')
+    holdings = portfolio.holdings.all()
+    trades = Trade.objects.filter(holding__in=holdings).order_by('-timestamp')
 
     if request.method == 'POST':
         holding_id = request.POST.get('holding')
