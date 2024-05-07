@@ -6,6 +6,7 @@ from portfolio.models import Portfolio
 from holding.models import Holding
 from coin.models import Coin
 from django.core.exceptions import PermissionDenied
+from django.contrib import messages
 
 @login_required
 def add_trade(request, portfolio_id):
@@ -23,11 +24,15 @@ def add_trade(request, portfolio_id):
             if trade.trade_type == 'buy':
                 holding.quantity += trade.quantity
             elif trade.trade_type == 'sell':
+                if holding.quantity < trade.quantity:
+                    messages.error(request, 'Insufficient holdings to perform the sell trade.')
+                    return redirect('add_trade', portfolio_id=portfolio_id)
                 holding.quantity -= trade.quantity
             
             holding.save()
             trade.save()
             
+            messages.success(request, 'Trade added successfully.')
             return redirect('portfolio_detail', portfolio_id=portfolio_id)
     else:
         form = TradeForm()

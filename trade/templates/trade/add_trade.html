@@ -2,33 +2,50 @@
 {% load static %}
 
 {% block content %}
-  <h2>Add Trade</h2>
-  <form method="post" id="trade-form">
-    {% csrf_token %}
-    <div>
-      <label for="id_coin">Coin:</label>
-      {{ form.coin }}
-      <span class="error" id="coin-error"></span>
-    </div>
-    <div>
-      <label for="id_trade_type">Trade Type:</label>
-      {{ form.trade_type }}
-      <span class="error" id="trade-type-error"></span>
-    </div>
-    <div>
-      <label for="id_quantity">Quantity:</label>
-      {{ form.quantity }}
-      <span class="error" id="quantity-error"></span>
-    </div>
-    <div>
-      <label for="id_price">Price:</label>
-      {{ form.price }}
-      <span class="error" id="price-error"></span>
-    </div>
-    <button type="submit">Add Trade</button>
-  </form>
+<h2>Add Trade</h2>
+
+<!-- Modal for success messages -->
+<div id="successModal" class="modal">
+  <div class="modal-content">
+    <p id="successMessage"></p>
+  </div>
+</div>
+
+<form method="post" id="trade-form">
+  {% csrf_token %}
+  <div>
+    <label for="id_coin">Coin:</label>
+    {{ form.coin }}
+    <span class="error" id="coin-error"></span>
+  </div>
+  <div>
+    <label for="id_trade_type">Trade Type:</label>
+    {{ form.trade_type }}
+    <span class="error" id="trade-type-error"></span>
+  </div>
+  <div>
+    <label for="id_quantity">Quantity:</label>
+    {{ form.quantity }}
+    <span class="error" id="quantity-error"></span>
+  </div>
+  <div>
+    <label for="id_price">Price:</label>
+    {{ form.price }}
+    <span class="error" id="price-error"></span>
+  </div>
+  <button type="submit">Add Trade</button>
+</form>
+
+{% if messages %}
+<ul class="messages">
+  {% for message in messages %}
+  <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
 {% endblock %}
 
 {% block javascript %}
-  <script src="{% static 'js/trade_form.js' %}"></script>
+<script src="{% static 'js/trade_form.js' %}"></script>
 {% endblock %}
