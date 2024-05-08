@@ -57,7 +57,8 @@ def add_trade(request, portfolio_id):
         print(f"Error in add_trade view: {str(e)}")  # Add this print statement
         logger = logging.getLogger(__name__)
         logger.exception("An error occurred while adding a trade")
-        messages.error(request, 'An error occurred while adding the trade. Please try again.')
+        messages.error(request, 'An error occurred while adding the trade. Please check your holdings and try again.')
+        trade.delete()  # Delete the trade if insufficient holdings
     
     print("Exiting add_trade view")  # Add this print statement
     return render(request, 'trade/add_trade.html', {'form': form, 'portfolio': portfolio})
