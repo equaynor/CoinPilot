@@ -1,6 +1,7 @@
 from django.db import models
 from portfolio.models import Portfolio
 from coin.models import Coin
+from django.utils import timezone
 
 class Trade(models.Model):
     TRADE_TYPE_CHOICES = (
@@ -12,7 +13,7 @@ class Trade(models.Model):
     trade_type = models.CharField(max_length=4, choices=TRADE_TYPE_CHOICES, default='BUY')
     quantity = models.DecimalField(max_digits=18, decimal_places=8, default=0)
     price = models.DecimalField(max_digits=18, decimal_places=2, default=0)
-    timestamp = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"{self.trade_type} {self.quantity} {self.coin.symbol} at {self.price}"

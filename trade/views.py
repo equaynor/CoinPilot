@@ -27,6 +27,8 @@ def add_trade(request, portfolio_id):
                 print("Form is valid")  # Add this print statement
                 trade = form.save(commit=False)
                 trade.portfolio = portfolio
+                if not trade.date:
+                    trade.date = timezone.now()
                 trade.save()  # Save the trade first
                 print(f"Trade saved: {trade}")  # Add this print statement
                 print(f"Trade type: {trade.trade_type}")  
@@ -68,7 +70,7 @@ def add_trade(request, portfolio_id):
 def trade_history(request, portfolio_id):
     try:
         portfolio = get_object_or_404(Portfolio, id=portfolio_id, user=request.user)
-        trades = Trade.objects.filter(portfolio=portfolio).order_by('-timestamp')
+        trades = Trade.objects.filter(portfolio=portfolio).order_by('-date')
 
         if request.method == 'POST':
             coin_id = request.POST.get('coin')
