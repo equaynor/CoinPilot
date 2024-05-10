@@ -15,6 +15,10 @@
     <button type="submit" class="btn btn-primary">Add Trade</button>
   </form>
 
+  <form action="{% url 'trade_history' portfolio_id=portfolio.id %}" method="get">
+    <button type="submit" class="btn btn-primary">Trade History</button>
+  </form>
+
   <form action="{% url 'coin_list' %}" method="get">
     <button type="submit" class="btn btn-secondary">View Cryptos</button>
   </form>
