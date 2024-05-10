@@ -71,8 +71,18 @@ def trade_history(request, portfolio_id):
 
     if request.method == 'POST':
         coin_id = request.POST.get('coin')
+        trade_type = request.POST.get('trade_type')
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+
         if coin_id:
             trades = trades.filter(coin_id=coin_id)
+        if trade_type:
+            trades = trades.filter(trade_type=trade_type)
+        if start_date:
+            trades = trades.filter(timestamp__gte=start_date)
+        if end_date:
+            trades = trades.filter(timestamp__lte=end_date)
 
     coins = Coin.objects.filter(trade__portfolio=portfolio).distinct()
 

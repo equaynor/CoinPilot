@@ -12,6 +12,20 @@
     <option value="{{ coin.id }}">{{ coin.name }}</option>
     {% endfor %}
   </select>
+
+  <label for="trade_type">Filter by Trade Type:</label>
+  <select name="trade_type" id="trade_type">
+    <option value="">All Trade Types</option>
+    <option value="BUY">Buy</option>
+    <option value="SELL">Sell</option>
+  </select>
+
+  <label for="start_date">Start Date:</label>
+  <input type="date" name="start_date" id="start_date">
+
+  <label for="end_date">End Date:</label>
+  <input type="date" name="end_date" id="end_date">
+
   <button type="submit">Filter</button>
 </form>
 
