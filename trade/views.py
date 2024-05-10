@@ -66,34 +66,39 @@ def add_trade(request, portfolio_id):
 
 @login_required
 def trade_history(request, portfolio_id):
-    portfolio = get_object_or_404(Portfolio, id=portfolio_id, user=request.user)
-    trades = Trade.objects.filter(portfolio=portfolio).order_by('-timestamp')
+    try:
+        portfolio = get_object_or_404(Portfolio, id=portfolio_id, user=request.user)
+        trades = Trade.objects.filter(portfolio=portfolio).order_by('-timestamp')
 
-    if request.method == 'POST':
-        coin_id = request.POST.get('coin')
-        trade_type = request.POST.get('trade_type')
-        start_date = request.POST.get('start_date')
-        end_date = request.POST.get('end_date')
+        if request.method == 'POST':
+            coin_id = request.POST.get('coin')
+            trade_type = request.POST.get('trade_type')
+            start_date = request.POST.get('start_date')
+            end_date = request.POST.get('end_date')
 
-        if coin_id:
-            trades = trades.filter(coin_id=coin_id)
-        if trade_type:
-            trades = trades.filter(trade_type=trade_type)
-        if start_date:
-            trades = trades.filter(timestamp__gte=start_date)
-        if end_date:
-            trades = trades.filter(timestamp__lte=end_date)
+            if coin_id:
+                trades = trades.filter(coin_id=coin_id)
+            if trade_type:
+                trades = trades.filter(trade_type=trade_type)
+            if start_date:
+                trades = trades.filter(timestamp__gte=start_date)
+            if end_date:
+                trades = trades.filter(timestamp__lte=end_date)
 
-    coins = Coin.objects.filter(trade__portfolio=portfolio).distinct()
+        coins = Coin.objects.filter(trade__portfolio=portfolio).distinct()
 
-    paginator = Paginator(trades, 10)  # Show 10 trades per page
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+        paginator = Paginator(trades, 10)  # Show 10 trades per page
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
 
-    context = {
-        'portfolio': portfolio,
-        'coins': coins,
-        'page_obj': page_obj,
-        'trades': trades,
-    }
-    return render(request, 'trade/trade_history.html', context)
+        context = {
+            'portfolio': portfolio,
+            'coins': coins,
+            'page_obj': page_obj,
+            'trades': trades,
+        }
+        return render(request, 'trade/trade_history.html', context)
+
+    except Exception as e:
+        messages.error(request, f"An error occurred while retrieving the trade history: {str(e)}")
+        return redirect('portfolio_detail', portfolio_id=portfolio_id)
