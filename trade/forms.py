@@ -5,6 +5,7 @@ from django.utils import timezone
 
 class TradeForm(forms.ModelForm):
     coin = forms.ModelChoiceField(queryset=Coin.objects.all())
+    quantity = forms.DecimalField(max_digits=18, decimal_places=8)
     date = forms.DateTimeField(
         widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         initial=timezone.now,
