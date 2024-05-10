@@ -37,7 +37,7 @@
   <button type="submit">Filter</button>
 </form>
 
-{% if trades %}
+{% if page_obj %}
 <table>
   <thead>
     <tr>
@@ -49,24 +49,16 @@
     </tr>
   </thead>
   <tbody>
-    {% for trade in trades %}
-    <tr>
-      <td>{{ trade.coin.symbol }}</td>
-      <td>{{ trade.trade_type }}</td>
-      <td>{{ trade.quantity }}</td>
-      <td>{{ trade.price }}</td>
-      <td>{{ trade.timestamp }}</td>
-    </tr>
+    {% for trade in page_obj %}
+      <tr>
+        <td>{{ trade.coin.symbol }}</td>
+        <td>{{ trade.trade_type }}</td>
+        <td>{{ trade.quantity }}</td>
+        <td>{{ trade.price }}</td>
+        <td>{{ trade.timestamp }}</td>
+      </tr>
     {% endfor %}
   </tbody>
-</table>
-{% else %}
-<p>No trades found.</p>
-{% endif %}
-
-{% if page_obj %}
-<table>
-  <!-- Existing table code -->
 </table>
 
 <div class="pagination">

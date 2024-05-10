@@ -95,7 +95,6 @@ def trade_history(request, portfolio_id):
             'portfolio': portfolio,
             'coins': coins,
             'page_obj': page_obj,
-            'trades': trades,
         }
         return render(request, 'trade/trade_history.html', context)
 
