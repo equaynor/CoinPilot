@@ -103,3 +103,30 @@ def trade_history(request, portfolio_id):
     except Exception as e:
         messages.error(request, f"An error occurred while retrieving the trade history: {str(e)}")
         return redirect('portfolio_detail', portfolio_id=portfolio_id)
+
+
+@login_required
+def trade_edit(request, trade_id):
+    trade = get_object_or_404(Trade, id=trade_id, portfolio__user=request.user)
+
+    if request.method == 'POST':
+        form = TradeForm(request.POST, instance=trade)
+        print("Form data:", request.POST)  # Debug print
+
+        if form.is_valid():
+            print("Form is valid")  # Debug print
+            trade = form.save()
+            print("Updated trade:", trade)  # Debug print
+            messages.success(request, 'Trade updated successfully.')
+            return redirect('trade_history', portfolio_id=trade.portfolio.id)
+        else:
+            print("Form errors:", form.errors)  # Debug print
+            messages.error(request, 'Failed to update trade. Please correct the errors.')
+    else:
+        form = TradeForm(instance=trade)
+
+    context = {
+        'form': form,
+        'trade': trade,
+    }
+    return render(request, 'trade/trade_edit.html', context)

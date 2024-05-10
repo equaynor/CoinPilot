@@ -56,6 +56,9 @@
         <td>{{ trade.quantity }}</td>
         <td>{{ trade.price }}</td>
         <td>{{ trade.date }}</td>
+        <td>
+          <a href="{% url 'trade_edit' trade_id=trade.id %}">Edit</a>
+        </td>
       </tr>
     {% endfor %}
   </tbody>

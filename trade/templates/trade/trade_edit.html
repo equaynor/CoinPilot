@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Edit Trade Details</h2>
+  <form method="post">
+    {% csrf_token %}
+    <div>
+      <label for="coin">Coin:</label>
+      {{ form.coin }}
+    </div>
+    <div>
+      <label for="trade_type">Trade Type:</label>
+      {{ form.trade_type }}
+    </div>
+    <div>
+      <label for="quantity">Quantity:</label>
+      {{ form.quantity }}
+    </div>
+    <div>
+      <label for="price">Price:</label>
+      {{ form.price }}
+    </div>
+    <div>
+      <label for="date">Date:</label>
+      {{ form.date }}
+    </div>
+    <button type="submit">Update Trade</button>
+  </form>
+{% endblock %}
