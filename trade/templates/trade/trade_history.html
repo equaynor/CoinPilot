@@ -1,44 +1,70 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Trade History for Portfolio: {{ portfolio.name }}</h2>
+<h2>Trade History for Portfolio: {{ portfolio.name }}</h2>
 
-  <form method="post">
-    {% csrf_token %}
-    <label for="coin">Filter by Coin:</label>
-    <select name="coin" id="coin">
-      <option value="">All Coins</option>
-      {% for coin in coins %}
-        <option value="{{ coin.id }}">{{ coin.name }}</option>
-      {% endfor %}
-    </select>
-    <button type="submit">Filter</button>
-  </form>
+<form method="post">
+  {% csrf_token %}
+  <label for="coin">Filter by Coin:</label>
+  <select name="coin" id="coin">
+    <option value="">All Coins</option>
+    {% for coin in coins %}
+    <option value="{{ coin.id }}">{{ coin.name }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit">Filter</button>
+</form>
 
-  {% if trades %}
-    <table>
-      <thead>
-        <tr>
-          <th>Coin</th>
-          <th>Trade Type</th>
-          <th>Quantity</th>
-          <th>Price</th>
-          <th>Timestamp</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for trade in trades %}
-          <tr>
-            <td>{{ trade.coin.symbol }}</td>
-            <td>{{ trade.trade_type }}</td>
-            <td>{{ trade.quantity }}</td>
-            <td>{{ trade.price }}</td>
-            <td>{{ trade.timestamp }}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  {% else %}
-    <p>No trades found.</p>
-  {% endif %}
+{% if trades %}
+<table>
+  <thead>
+    <tr>
+      <th>Coin</th>
+      <th>Trade Type</th>
+      <th>Quantity</th>
+      <th>Price</th>
+      <th>Timestamp</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for trade in trades %}
+    <tr>
+      <td>{{ trade.coin.symbol }}</td>
+      <td>{{ trade.trade_type }}</td>
+      <td>{{ trade.quantity }}</td>
+      <td>{{ trade.price }}</td>
+      <td>{{ trade.timestamp }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>No trades found.</p>
+{% endif %}
+
+{% if page_obj %}
+<table>
+  <!-- Existing table code -->
+</table>
+
+<div class="pagination">
+  <span class="step-links">
+    {% if page_obj.has_previous %}
+    <a href="?page=1">&laquo; First</a>
+    <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+    {% endif %}
+
+    <span class="current-page">
+      Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+    </span>
+
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}">Next</a>
+    <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+    {% endif %}
+  </span>
+</div>
+{% else %}
+<p>No trades found.</p>
+{% endif %}
 {% endblock %}

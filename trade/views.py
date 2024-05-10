@@ -9,6 +9,7 @@ from coin.models import Coin
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 import logging
+from django.core.paginator import Paginator
 
 @login_required
 def add_trade(request, portfolio_id):
@@ -75,9 +76,14 @@ def trade_history(request, portfolio_id):
 
     coins = Coin.objects.filter(trade__portfolio=portfolio).distinct()
 
+    paginator = Paginator(trades, 10)  # Show 10 trades per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     context = {
         'portfolio': portfolio,
         'coins': coins,
+        'page_obj': page_obj,
         'trades': trades,
     }
     return render(request, 'trade/trade_history.html', context)
