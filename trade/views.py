@@ -4,12 +4,13 @@ from .models import Trade
 from .forms import TradeForm
 from portfolio.models import Portfolio
 from holding.models import Holding
-from holding.views import update_holding
+from holding.views import update_holding, reverse_holding, edit_holding
 from coin.models import Coin
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 import logging
 from django.core.paginator import Paginator
+
 
 @login_required
 def add_trade(request, portfolio_id):
@@ -107,26 +108,87 @@ def trade_history(request, portfolio_id):
 
 @login_required
 def trade_edit(request, trade_id):
-    trade = get_object_or_404(Trade, id=trade_id, portfolio__user=request.user)
+    original_trade = get_object_or_404(Trade, id=trade_id)
+    form = TradeForm(request.POST or None, instance=original_trade)
+    temporary_original_trade = None  # Initialize temporary_original_trade to None
 
+    if request.method == 'GET':
+        # Create a temporary trade object with the original trade data
+        original_trade_data = {
+            'portfolio': original_trade.portfolio.id,
+            'coin': original_trade.coin.id,
+            'trade_type': original_trade.trade_type,
+            'quantity': original_trade.quantity,
+            'price': original_trade.price,
+            'date': original_trade.date.strftime('%Y-%m-%dT%H:%M:%S')
+        }
+        
+        try:
+            temporary_original_trade_id = update_trade(request, original_trade.portfolio.id, original_trade_data)
+            print(f"Temporary original trade ID: {temporary_original_trade_id}")  # Debug print
+            request.session['temporary_original_trade_id'] = temporary_original_trade_id  # Store the ID in the session
+            temporary_original_trade = get_object_or_404(Trade, id=temporary_original_trade_id)
+            print(f"Temporary original trade: {temporary_original_trade}")  # Debug print
+        except ValueError as e:
+            messages.error(request, str(e))
+            return redirect('trade_history', portfolio_id=original_trade.portfolio.id)
+    
     if request.method == 'POST':
-        form = TradeForm(request.POST, instance=trade)
-        print("Form data:", request.POST)  # Debug print
-
+        print(f"Form data: {request.POST}")  # Debug print
         if form.is_valid():
-            print("Form is valid")  # Debug print
-            trade = form.save()
-            print("Updated trade:", trade)  # Debug print
-            messages.success(request, 'Trade updated successfully.')
-            return redirect('trade_history', portfolio_id=trade.portfolio.id)
-        else:
-            print("Form errors:", form.errors)  # Debug print
-            messages.error(request, 'Failed to update trade. Please correct the errors.')
-    else:
-        form = TradeForm(instance=trade)
-
-    context = {
-        'form': form,
-        'trade': trade,
-    }
+            updated_trade_data = {
+                'portfolio': original_trade.portfolio,
+                'coin': form.cleaned_data['coin'],
+                'trade_type': form.cleaned_data['trade_type'],
+                'quantity': form.cleaned_data['quantity'],
+                'price': form.cleaned_data['price'],
+                'date': form.cleaned_data['date']
+            }
+            
+            temporary_original_trade_id = request.session.get('temporary_original_trade_id')  # Retrieve the ID from the session
+            temporary_original_trade = get_object_or_404(Trade, id=temporary_original_trade_id)
+            
+            print(f"Original trade: {temporary_original_trade}")  # Debug print
+            print(f"Updated trade data: {updated_trade_data}")  # Debug print
+            
+            try:
+                # Perform holding updates
+                reverse_holding(temporary_original_trade)
+                edit_holding(updated_trade_data)
+                
+                # Update the original trade object with the edited form data
+                form = TradeForm(updated_trade_data, instance=original_trade)
+                form.save()
+                
+                # Delete the temporary original trade object
+                temporary_original_trade.delete()
+                
+                print("Trade updated successfully")  # Debug print
+                return redirect('trade_history', portfolio_id=original_trade.portfolio.id)
+            except ValueError as e:
+                # Handle the case when edit_holding raises a ValueError
+                messages.error(request, str(e))
+                temporary_original_trade.delete()  # Delete the temporary original trade object
+    
+    context = {'form': form, 'trade': original_trade}
     return render(request, 'trade/trade_edit.html', context)
+
+
+def update_trade(request, portfolio_id, original_trade_data):
+    if request.method == 'GET':
+        portfolio = get_object_or_404(Portfolio, id=portfolio_id)
+        form = TradeForm(original_trade_data)
+        
+        if form.is_valid():
+            trade = form.save(commit=False)
+            trade.portfolio = portfolio
+            trade.user = request.user
+            trade.save()
+            
+            print(f"Trade saved: {trade.trade_type} {trade.quantity} {trade.coin.symbol} at {trade.price}")  # Debug print
+            
+            return trade.id  # Return the trade ID directly
+        else:
+            raise ValueError(form.errors)  # Raise a ValueError with form errors
+    
+    raise ValueError('Invalid request method')  # Raise a ValueError for invalid request method
