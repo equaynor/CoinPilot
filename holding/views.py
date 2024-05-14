@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
+from decimal import Decimal
 from .models import Holding
 from trade.models import Trade
 
@@ -25,3 +26,39 @@ def update_holding(trade):
         print(f"Error in update_holding function: {str(e)}")  # Add this print statement
     
     print("Exiting update_holding function")  # Add this print statement
+
+
+def reverse_holding(temporary_original_trade):
+    holding = get_object_or_404(Holding, portfolio=temporary_original_trade.portfolio, coin=temporary_original_trade.coin)
+    print(f"Reversing holding for original trade: {temporary_original_trade}")  # Debug print
+    print(f"Initial holding quantity: {holding.quantity}")  # Debug print
+
+    if temporary_original_trade.trade_type == 'BUY':
+        holding.quantity -= temporary_original_trade.quantity
+    elif temporary_original_trade.trade_type == 'SELL':
+        holding.quantity += temporary_original_trade.quantity
+
+    print(f"Updated holding quantity after reversal: {holding.quantity}")  # Debug print
+    holding.save()
+
+
+def edit_holding(updated_trade_data):
+    portfolio = updated_trade_data['portfolio']
+    coin = updated_trade_data['coin']
+
+    try:
+        holding = Holding.objects.get(portfolio=portfolio, coin=coin)
+        print(f"Found holding: {holding.quantity} {coin} in {portfolio}")
+
+        if updated_trade_data['trade_type'] == 'BUY':
+            holding.quantity += Decimal(updated_trade_data['quantity'])
+        elif updated_trade_data['trade_type'] == 'SELL':
+            holding.quantity -= Decimal(updated_trade_data['quantity'])
+
+        if holding.quantity < 0:
+            raise ValueError("Insufficient holding quantity")
+
+        holding.save()
+        print(f"Saved holding: {holding.quantity} {coin} in {portfolio}")
+    except Holding.DoesNotExist:
+        raise ValueError("Holding not found")
