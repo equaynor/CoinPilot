@@ -196,3 +196,19 @@ def update_trade(request, portfolio_id, original_trade_data):
             raise ValueError(form.errors)  # Raise a ValueError with form errors
     
     raise ValueError('Invalid request method')  # Raise a ValueError for invalid request method
+
+
+def trade_delete(request, trade_id):
+    trade = get_object_or_404(Trade, id=trade_id)
+    
+    if request.method == 'POST':
+        try:
+            reverse_holding(trade)  # Revert the holding quantity
+            trade.delete()
+            messages.success(request, 'Trade deleted successfully.')
+        except Exception as e:
+            messages.error(request, f'Error deleting trade: {str(e)}')
+    else:
+        messages.error(request, 'Invalid request method.')
+        
+    return redirect('trade_history', portfolio_id=trade.portfolio.id)
