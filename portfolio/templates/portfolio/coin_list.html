@@ -1,35 +1,38 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container">
-    <h1>Coin List</h1>
-    <form method="get">
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" name="q" placeholder="Search by name or symbol" value="{{ query }}">
-            <button class="btn btn-primary" type="submit">Search</button>
-        </div>
-    </form>
-    <table class="table">
-        <thead>
-            <tr>
-                <th><a href="?sort_by=name">Name</a></th>
-                <th>Symbol</th>
-                <th><a href="?sort_by=price">Price</a></th>
-                <th><a href="?sort_by=market_cap">Market Cap</a></th>
-                <th><a href="?sort_by=change_24h">24h Change</a></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for coin in coins %}
-            <tr>
-                <td>{{ coin.name }}</td>
-                <td>{{ coin.symbol }}</td>
-                <td>{{ coin.current_price }}</td>
-                <td>{{ coin.market_cap }}</td>
-                <td>{{ coin.price_change_percentage_24h }}%</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="content-container">
+    <div class="container">
+        <h1>Coin List</h1>
+        <form method="get">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" name="q" placeholder="Search by name or symbol"
+                    value="{{ query }}">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+        </form>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th><a href="?sort_by=name">Name</a></th>
+                    <th>Symbol</th>
+                    <th><a href="?sort_by=price">Price</a></th>
+                    <th><a href="?sort_by=market_cap">Market Cap</a></th>
+                    <th><a href="?sort_by=change_24h">24h Change</a></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for coin in coins %}
+                <tr>
+                    <td>{{ coin.name }}</td>
+                    <td>{{ coin.symbol }}</td>
+                    <td>{{ coin.current_price }}</td>
+                    <td>{{ coin.market_cap }}</td>
+                    <td>{{ coin.price_change_percentage_24h }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}

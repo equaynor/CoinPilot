@@ -2,54 +2,55 @@
 {% load static %}
 
 {% block content %}
-<h2>Add Trade</h2>
+<div class="content-container">
+  <h2>Add Trade</h2>
 
-{% if messages %}
-{% for message in messages %}
+  {% if messages %}
+  {% for message in messages %}
   <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" id="successMessage">
     {{ message }}
   </div>
-{% endfor %}
-{% endif %}
-
-<form method="post" id="trade-form">
-  {% csrf_token %}
-  <div>
-    <label for="id_coin">Coin:</label>
-    {{ form.coin }}
-    <span class="error" id="coin-error"></span>
-  </div>
-  <div>
-    <label for="id_trade_type">Trade Type:</label>
-    {{ form.trade_type }}
-    <span class="error" id="trade-type-error"></span>
-  </div>
-  <div>
-    <label for="id_quantity">Quantity:</label>
-    {{ form.quantity }}
-    <span class="error" id="quantity-error"></span>
-  </div>
-  <div>
-    <label for="id_price">Price:</label>
-    {{ form.price }}
-    <span class="error" id="price-error"></span>
-  </div>
-  <div>
-    <label for="id_date">Date:</label>
-    {{ form.date }}
-    <span class="error" id="date-error"></span>
-  </div>
-  <button type="submit">Add Trade</button>
-</form>
-
-{% if messages %}
-<ul class="messages">
-  {% for message in messages %}
-  <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
   {% endfor %}
-</ul>
-{% endif %}
+  {% endif %}
 
+  <form method="post" id="trade-form">
+    {% csrf_token %}
+    <div>
+      <label for="id_coin">Coin:</label>
+      {{ form.coin }}
+      <span class="error" id="coin-error"></span>
+    </div>
+    <div>
+      <label for="id_trade_type">Trade Type:</label>
+      {{ form.trade_type }}
+      <span class="error" id="trade-type-error"></span>
+    </div>
+    <div>
+      <label for="id_quantity">Quantity:</label>
+      {{ form.quantity }}
+      <span class="error" id="quantity-error"></span>
+    </div>
+    <div>
+      <label for="id_price">Price:</label>
+      {{ form.price }}
+      <span class="error" id="price-error"></span>
+    </div>
+    <div>
+      <label for="id_date">Date:</label>
+      {{ form.date }}
+      <span class="error" id="date-error"></span>
+    </div>
+    <button type="submit">Add Trade</button>
+  </form>
+
+  {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+      {% endfor %}
+  </ul>
+  {% endif %}
+</div>
 {% endblock %}
 
 {% block javascript %}

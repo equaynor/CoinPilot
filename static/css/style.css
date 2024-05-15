@@ -31,6 +31,10 @@ body {
     border-color: #644f66;
 }
 
+.content-container {
+    margin-top: 56px;
+}
+
 .btn-primary {
     background-color: #79627B;
     border-color: #79627B;

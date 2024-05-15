@@ -3,41 +3,42 @@
 {% load static %}
 
 {% block content %}
-<h2>Portfolio: {{ portfolio.name }}</h2>
+<div class="content-container">
+  <h2>Portfolio: {{ portfolio.name }}</h2>
 
-<!-- Modal for success messages -->
-<!-- <div id="successModal" class="modal">
+  <!-- Modal for success messages -->
+  <!-- <div id="successModal" class="modal">
   <div class="modal-content">
     <p id="successMessage"></p>
   </div>
 </div> -->
 
-{% if messages %}
-    {% for message in messages %}
-      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" id="successMessage">
-        {{ message }}
-      </div>
-    {% endfor %}
-    {% endif %}
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" id="successMessage">
+    {{ message }}
+  </div>
+  {% endfor %}
+  {% endif %}
 
-<div class="button-container">
-  <form action="{% url 'add_trade' portfolio_id=portfolio.id %}" method="get">
-    <button type="submit" class="btn btn-primary">Add Trade</button>
-  </form>
+  <div class="button-container">
+    <form action="{% url 'add_trade' portfolio_id=portfolio.id %}" method="get">
+      <button type="submit" class="btn btn-primary">Add Trade</button>
+    </form>
 
-  <form action="{% url 'trade_history' portfolio_id=portfolio.id %}" method="get">
-    <button type="submit" class="btn btn-primary">Trade History</button>
-  </form>
+    <form action="{% url 'trade_history' portfolio_id=portfolio.id %}" method="get">
+      <button type="submit" class="btn btn-primary">Trade History</button>
+    </form>
 
-  <form action="{% url 'coin_list' %}" method="get">
-    <button type="submit" class="btn btn-secondary">View Cryptos</button>
-  </form>
+    <form action="{% url 'coin_list' %}" method="get">
+      <button type="submit" class="btn btn-secondary">View Cryptos</button>
+    </form>
+  </div>
+
+  <!-- Add any additional portfolio details or sections here -->
 </div>
-
-<!-- Add any additional portfolio details or sections here -->
-
 {% endblock %}
 
 {% block javascript %}
-  <script src="{% static 'js/message.js' %}"></script>
+<script src="{% static 'js/message.js' %}"></script>
 {% endblock %}
