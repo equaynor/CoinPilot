@@ -4,7 +4,7 @@ from .models import Trade
 from .forms import TradeForm
 from portfolio.models import Portfolio
 from holding.models import Holding
-from holding.views import update_holding, reverse_holding, edit_holding
+from holding.views import update_holding, reverse_holding, reinstate_holding, edit_holding
 from coin.models import Coin
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
@@ -150,11 +150,13 @@ def trade_edit(request, trade_id):
             
             print(f"Original trade: {temporary_original_trade}")  # Debug print
             print(f"Updated trade data: {updated_trade_data}")  # Debug print
-            
+
             try:
                 # Perform holding updates
                 reverse_holding(temporary_original_trade)
+                print("Before calling edit_holding")
                 edit_holding(updated_trade_data)
+                print("After calling edit_holding")
                 
                 # Update the original trade object with the edited form data
                 form = TradeForm(updated_trade_data, instance=original_trade)
@@ -166,9 +168,10 @@ def trade_edit(request, trade_id):
                 print("Trade updated successfully")  # Debug print
                 return redirect('trade_history', portfolio_id=original_trade.portfolio.id)
             except ValueError as e:
+                print(f"ValueError caught: {str(e)}")
                 # Handle the case when edit_holding raises a ValueError
                 messages.error(request, str(e))
-                reverse_holding(updated_trade_data)  # Revert the holding quantity back to the original
+                reinstate_holding(temporary_original_trade)  # Revert the holding quantity back to the original
                 temporary_original_trade.delete()  # Delete the temporary original trade object
     
     context = {'form': form, 'trade': original_trade}
