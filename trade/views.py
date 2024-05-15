@@ -168,6 +168,7 @@ def trade_edit(request, trade_id):
             except ValueError as e:
                 # Handle the case when edit_holding raises a ValueError
                 messages.error(request, str(e))
+                reverse_holding(updated_trade_data)  # Revert the holding quantity back to the original
                 temporary_original_trade.delete()  # Delete the temporary original trade object
     
     context = {'form': form, 'trade': original_trade}
