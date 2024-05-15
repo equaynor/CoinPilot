@@ -42,6 +42,20 @@ def reverse_holding(temporary_original_trade):
     holding.save()
 
 
+def reinstate_holding(temporary_original_trade):
+    holding = get_object_or_404(Holding, portfolio=temporary_original_trade.portfolio, coin=temporary_original_trade.coin)
+    print(f"Reinstating holding for original trade: {temporary_original_trade}")  # Debug print
+    print(f"Initial holding quantity: {holding.quantity}")  # Debug print
+
+    if temporary_original_trade.trade_type == 'BUY':
+        holding.quantity += temporary_original_trade.quantity
+    elif temporary_original_trade.trade_type == 'SELL':
+        holding.quantity -= temporary_original_trade.quantity
+
+    print(f"Updated holding quantity after reinstation: {holding.quantity}")  # Debug print
+    holding.save()
+
+
 def edit_holding(updated_trade_data):
     portfolio = updated_trade_data['portfolio']
     coin = updated_trade_data['coin']
@@ -53,10 +67,12 @@ def edit_holding(updated_trade_data):
         if updated_trade_data['trade_type'] == 'BUY':
             holding.quantity += Decimal(updated_trade_data['quantity'])
         elif updated_trade_data['trade_type'] == 'SELL':
-            holding.quantity -= Decimal(updated_trade_data['quantity'])
+            print(f"Sell trade: Available quantity: {holding.quantity}, Required quantity: {updated_trade_data['quantity']}")
+            if holding.quantity < Decimal(updated_trade_data['quantity']):
+                print("Insufficient funds")
+                raise ValueError(f"Insufficient funds. Available: {holding.quantity}, Required quantity: {updated_trade_data['quantity']}")
 
-        if holding.quantity < 0:
-            raise ValueError("Insufficient holding quantity")
+            holding.quantity -= Decimal(updated_trade_data['quantity'])
 
         holding.save()
         print(f"Saved holding: {holding.quantity} {coin} in {portfolio}")
