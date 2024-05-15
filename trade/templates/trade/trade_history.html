@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block content %}
 <h2>Trade History for Portfolio: {{ portfolio.name }}</h2>
 
@@ -84,4 +86,8 @@
 {% else %}
 <p>No trades found.</p>
 {% endif %}
+{% endblock %}
+
+{% block javascript %}
+  <script src="{% static 'js/message.js' %}"></script>
 {% endblock %}

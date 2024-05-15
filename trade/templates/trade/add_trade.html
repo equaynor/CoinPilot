@@ -4,12 +4,13 @@
 {% block content %}
 <h2>Add Trade</h2>
 
-<!-- Modal for success messages -->
-<div id="successModal" class="modal">
-  <div class="modal-content">
-    <p id="successMessage"></p>
+{% if messages %}
+{% for message in messages %}
+  <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" id="successMessage">
+    {{ message }}
   </div>
-</div>
+{% endfor %}
+{% endif %}
 
 <form method="post" id="trade-form">
   {% csrf_token %}
@@ -53,4 +54,5 @@
 
 {% block javascript %}
 <script src="{% static 'js/trade_form.js' %}"></script>
+<script src="{% static 'js/message.js' %}"></script>
 {% endblock %}
