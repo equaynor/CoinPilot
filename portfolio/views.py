@@ -4,11 +4,13 @@ from coin.models import Coin
 from django.db.models import Q
 from django.core.cache import cache
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.contrib import messages
 
 
 @login_required
 def portfolio_redirect(request):
-    portfolio = Portfolio.objects.filter(user=request.user).first()
+    portfolio = request.user.portfolios.first()
     if portfolio:
         return redirect('portfolio_detail', portfolio_id=portfolio.id)
     else:
@@ -18,9 +20,22 @@ def portfolio_redirect(request):
 
 
 def portfolio_detail(request, portfolio_id):
-    portfolio = get_object_or_404(Portfolio, id=portfolio_id)
-    return render(request, 'portfolio/portfolio.html', {'portfolio': portfolio})
+    portfolio = get_object_or_404(Portfolio, id=portfolio_id, user=request.user)
+    user_portfolios = request.user.portfolios.all()
 
+    return render(request, 'portfolio/portfolio.html', {'portfolio': portfolio, 'user_portfolios': user_portfolios})
+
+
+@login_required
+def create_portfolio(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        if name:
+            portfolio = Portfolio.objects.create(user=request.user, name=name)
+            messages.success(request, f"Portfolio '{portfolio.name}' created successfully!")
+            return JsonResponse({'status': 'success', 'portfolio_id': portfolio.id})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+    
 
 def coin_list(request):
     query = request.GET.get('q')
