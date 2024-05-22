@@ -35,7 +35,19 @@ def create_portfolio(request):
             messages.success(request, f"Portfolio '{portfolio.name}' created successfully!")
             return JsonResponse({'status': 'success', 'portfolio_id': portfolio.id})
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
-    
+
+
+@login_required
+def delete_portfolio(request, portfolio_id):
+    portfolio = get_object_or_404(Portfolio, id=portfolio_id, user=request.user)
+    if request.method == 'POST':
+        portfolio.delete()
+        messages.success(request, "Portfolio deleted successfully.")
+        return redirect('portfolio_redirect')
+    else:
+        messages.error(request, "Invalid request method.")
+        return redirect('portfolio_redirect')
+
 
 def coin_list(request):
     query = request.GET.get('q')
