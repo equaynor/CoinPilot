@@ -12,7 +12,7 @@ $(document).ready(function () {
                 if (response.status === 'success') {
                     $('#createPortfolioModal').modal('hide');
                     // Redirect to the portfolio detail page with the new portfolio ID
-                    window.location.href = '/portfolio/' + response.portfolio_id + '/';
+                    window.location.href = '/portfolio/details/' + response.portfolio_id + '/';
                 } else {
                     console.log('Portfolio creation failed.');
                 }
