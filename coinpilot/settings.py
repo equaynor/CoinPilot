@@ -36,7 +36,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    '8000-equaynor-coinpilot-8vtbbp773f.us1.codeanyapp.com',
+    '8000-equaynor-coinpilot-ylldfbhodau.ws-eu114.gitpod.io',
     '.herokuapp.com',]
 
 
@@ -139,7 +139,7 @@ CACHES = {
 COINGECKO_API = os.environ.get("COINGECKO_API")
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://*.codeanyapp.com",
+    "https://*.gitpod.io",
     "https://*.herokuapp.com"
 ]
 
