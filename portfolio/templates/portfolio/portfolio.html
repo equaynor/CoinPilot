@@ -31,6 +31,12 @@
       </div>
     </form>
 
+    <form id="deletePortfolioForm" action="{% url 'delete_portfolio' portfolio_id=portfolio.id %}" method="post"
+      onsubmit="return confirmDeletion();">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">Delete Portfolio</button>
+    </form>
+
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createPortfolioModal">
       Create Portfolio
     </button>
@@ -83,5 +89,5 @@
 <script src="{% static 'js/message.js' %}"></script>
 <script src="{% static 'js/create_portfolio.js' %}"></script>
 <script src="{% static 'js/portfolio_selector.js' %}"></script>
-
+<script src="{% static 'js/delete_portfolio.js' %}"></script>
 {% endblock %}
