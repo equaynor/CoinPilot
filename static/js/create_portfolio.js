@@ -5,7 +5,7 @@ $(document).ready(function () {
         var formData = form.serialize();
 
         $.ajax({
-            url: '{% url "create_portfolio" %}',
+            url: '/portfolio/create/',
             type: 'POST',
             data: formData,
             success: function (response) {
