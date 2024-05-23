@@ -12,7 +12,7 @@ class Trade(models.Model):
     coin = models.ForeignKey(Coin, on_delete=models.CASCADE, null=True)
     trade_type = models.CharField(max_length=4, choices=TRADE_TYPE_CHOICES, default='BUY')
     quantity = models.DecimalField(max_digits=18, decimal_places=8, default=0)
-    price = models.DecimalField(max_digits=18, decimal_places=2, default=0)
+    price = models.DecimalField(max_digits=18, decimal_places=5, default=0)
     date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
