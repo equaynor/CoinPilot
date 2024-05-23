@@ -19,11 +19,38 @@ def portfolio_redirect(request):
         return redirect('portfolio_detail', portfolio_id=new_portfolio.id)
 
 
+@login_required
 def portfolio_detail(request, portfolio_id):
     portfolio = get_object_or_404(Portfolio, id=portfolio_id, user=request.user)
     user_portfolios = request.user.portfolios.all()
+    
+    holdings = portfolio.holdings.all().select_related('coin')
+    holdings_data = []
+    total_value = 0
 
-    return render(request, 'portfolio/portfolio.html', {'portfolio': portfolio, 'user_portfolios': user_portfolios})
+    for holding in holdings:
+        coin = holding.coin
+        current_price = coin.current_price
+        value = holding.quantity * current_price
+        total_value += value
+
+        holdings_data.append({
+            'coin': coin,
+            'quantity': holding.quantity,
+            'current_price': current_price,
+            'value': value
+        })
+
+    portfolio_summary = {
+        'holdings': holdings_data,
+        'total_value': total_value
+    }
+
+    return render(request, 'portfolio/portfolio.html', {
+        'portfolio': portfolio,
+        'user_portfolios': user_portfolios,
+        'portfolio_summary': portfolio_summary
+    })
 
 
 @login_required

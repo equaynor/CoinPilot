@@ -18,42 +18,76 @@
 
   <!-- Buttons -->
   <div class="button-container">
-    <form action="{% url 'portfolio_detail' portfolio_id=portfolio.id %}" method="get">
-      <div class="form-group">
-        <label for="portfolio_dropdown">Select Portfolio:</label>
-        <select class="form-control" id="portfolio_dropdown" name="portfolio_id" onchange="this.form.submit()">
-          {% for user_portfolio in user_portfolios %}
-          <option value="{{ user_portfolio.id }}" {% if user_portfolio.id == portfolio.id %}selected{% endif %}>
-            {{ user_portfolio.name }}
-          </option>
-          {% endfor %}
-        </select>
-      </div>
-    </form>
-
-    <form id="deletePortfolioForm" action="{% url 'delete_portfolio' portfolio_id=portfolio.id %}" method="post"
-      onsubmit="return confirmDeletion();">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-danger">Delete Portfolio</button>
-    </form>
-
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createPortfolioModal">
-      Create Portfolio
-    </button>
-
-    <form action="{% url 'add_trade' portfolio_id=portfolio.id %}" method="get">
-      <button type="submit" class="btn btn-primary">Add Trade</button>
-    </form>
-
-    <form action="{% url 'trade_history' portfolio_id=portfolio.id %}" method="get">
-      <button type="submit" class="btn btn-primary">Trade History</button>
-    </form>
-
-    <form action="{% url 'coin_list' %}" method="get">
-      <button type="submit" class="btn btn-secondary">View Cryptos</button>
-    </form>
+    <div>
+      <form action="{% url 'portfolio_detail' portfolio_id=portfolio.id %}" method="get" class="select-container">
+        <div class="form-group">
+          <label for="portfolio_dropdown">Select Portfolio:</label>
+          <select class="form-control" id="portfolio_dropdown" name="portfolio_id" onchange="this.form.submit()">
+            {% for user_portfolio in user_portfolios %}
+            <option value="{{ user_portfolio.id }}" {% if user_portfolio.id == portfolio.id %}selected{% endif %}>
+              {{ user_portfolio.name }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+      </form>
+    </div>
+    <div>
+      <form id="deletePortfolioForm" action="{% url 'delete_portfolio' portfolio_id=portfolio.id %}" method="post"
+        onsubmit="return confirmDeletion();">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Delete Portfolio</button>
+      </form>
+    </div>
+    <div>
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createPortfolioModal">
+        Create Portfolio
+      </button>
+    </div>
+    <div>
+      <form action="{% url 'add_trade' portfolio_id=portfolio.id %}" method="get">
+        <button type="submit" class="btn btn-primary">Add Trade</button>
+      </form>
+    </div>
+    <div>
+      <form action="{% url 'trade_history' portfolio_id=portfolio.id %}" method="get">
+        <button type="submit" class="btn btn-primary">Trade History</button>
+      </form>
+    </div>
+    <div>
+      <form action="{% url 'coin_list' %}" method="get">
+        <button type="submit" class="btn btn-secondary">View Cryptos</button>
+      </form>
+    </div>
   </div>
 
+  <!-- Portfolio Summary -->
+  <div class="portfolio-summary">
+    <h3>Portfolio Summary</h3>
+    <p>Total Value: {{ portfolio_summary.total_value|floatformat:2 }} USD</p>
+
+    <h3>Holdings</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Cryptocurrency</th>
+          <th>Quantity</th>
+          <th>Current Price</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for holding in portfolio_summary.holdings %}
+        <tr class="table-row">
+          <td>{{ holding.coin.name }} ({{ holding.coin.symbol }})</td>
+          <td>{{ holding.quantity }}</td>
+          <td>{{ holding.current_price|floatformat:2 }} USD</td>
+          <td>{{ holding.value|floatformat:2 }} USD</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
   <!-- Create Portfolio Modal -->
   <div class="modal fade" id="createPortfolioModal" tabindex="-1" role="dialog"
@@ -62,8 +96,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="createPortfolioModalLabel">Create Portfolio</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-          </button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <form id="createPortfolioForm">
@@ -81,8 +114,8 @@
       </div>
     </div>
   </div>
-
 </div>
+
 {% endblock %}
 
 {% block javascript %}

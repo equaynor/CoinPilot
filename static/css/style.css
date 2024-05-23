@@ -32,7 +32,7 @@ body {
 }
 
 .content-container {
-    margin-top: 56px;
+    margin-top: 56px 20px 0;
 }
 
 .btn-primary {
@@ -85,25 +85,38 @@ body {
     color: #79627B !important;
 }
 
-/* .modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
-  }
-  
-  .modal-content {
-    background-color: #F8F7F7;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-  } */
+.button-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center; /* Vertically align items */
+    gap: 10px; /* Adjust the spacing between buttons as needed */
+}
+
+.button-container > div {
+    flex: 1; /* Allow each button to take an equal amount of space */
+    display: flex;
+    justify-content: center; /* Center the button within the div */
+}
+
+
+
+th, td {
+    padding: 10px 20px 10px 0; /* Add space between table rows */
+}
+
+.select-container {
+    position: relative;
+    display: inline-block;
+}
+
+.select-container select {
+    padding-right: 30px; /* Space for the arrow */
+    height: 40px; /* Ensure consistent height */
+}
+
+.content-container h3 {
+    margin-top: 20px; /* Add space above the Portfolio Summary heading */
+}
 
 .auth-bg-image {
     background-image: url('https://res.cloudinary.com/dqodpxmad/image/upload/v1712415050/login_bg_c6wc8x.jpg');
