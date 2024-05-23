@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Portfolio
+from trade.models import Trade
 from coin.models import Coin
 from django.db.models import Q
 from django.core.cache import cache
@@ -23,27 +24,41 @@ def portfolio_redirect(request):
 def portfolio_detail(request, portfolio_id):
     portfolio = get_object_or_404(Portfolio, id=portfolio_id, user=request.user)
     user_portfolios = request.user.portfolios.all()
-    
+
     holdings = portfolio.holdings.all().select_related('coin')
     holdings_data = []
     total_value = 0
+    total_cost = 0
 
     for holding in holdings:
         coin = holding.coin
+        trades = Trade.objects.filter(portfolio=portfolio, coin=coin, trade_type='BUY')
         current_price = coin.current_price
-        value = holding.quantity * current_price
-        total_value += value
+
+        profit_loss_data = calculate_profit_loss(holding, trades, current_price)
+
+        total_value += profit_loss_data['value']
+        total_cost += profit_loss_data['cost']
 
         holdings_data.append({
             'coin': coin,
             'quantity': holding.quantity,
             'current_price': current_price,
-            'value': value
+            'value': profit_loss_data['value'],
+            'average_purchase_price': profit_loss_data['average_purchase_price'],
+            'profit_loss': profit_loss_data['profit_loss'],
+            'profit_loss_percentage': profit_loss_data['profit_loss_percentage']
         })
+
+    overall_profit_loss = total_value - total_cost
+    overall_profit_loss_percentage = (overall_profit_loss / total_cost) * 100 if total_cost > 0 else 0
 
     portfolio_summary = {
         'holdings': holdings_data,
-        'total_value': total_value
+        'total_value': total_value,
+        'total_cost': total_cost,
+        'overall_profit_loss': overall_profit_loss,
+        'overall_profit_loss_percentage': overall_profit_loss_percentage
     }
 
     return render(request, 'portfolio/portfolio.html', {
@@ -51,6 +66,25 @@ def portfolio_detail(request, portfolio_id):
         'user_portfolios': user_portfolios,
         'portfolio_summary': portfolio_summary
     })
+
+
+def calculate_profit_loss(holding, trades, current_price):
+    total_quantity = sum(trade.quantity for trade in trades)
+    total_spent = sum(trade.quantity * trade.price for trade in trades)
+    average_purchase_price = total_spent / total_quantity if total_quantity > 0 else 0
+
+    value = holding.quantity * current_price
+    cost = holding.quantity * average_purchase_price
+    profit_loss = value - cost
+    profit_loss_percentage = (profit_loss / cost) * 100 if cost > 0 else 0
+
+    return {
+        'average_purchase_price': average_purchase_price,
+        'value': value,
+        'cost': cost,
+        'profit_loss': profit_loss,
+        'profit_loss_percentage': profit_loss_percentage
+    }
 
 
 @login_required

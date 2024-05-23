@@ -65,6 +65,9 @@
   <div class="portfolio-summary">
     <h3>Portfolio Summary</h3>
     <p>Total Value: {{ portfolio_summary.total_value|floatformat:2 }} USD</p>
+    <p>Total Cost: {{ portfolio_summary.total_cost|floatformat:2 }} USD</p>
+    <p>Overall Profit/Loss: {{ portfolio_summary.overall_profit_loss|floatformat:2 }} USD</p>
+    <p>Overall Profit/Loss (%): {{ portfolio_summary.overall_profit_loss_percentage|floatformat:2 }}%</p>
 
     <h3>Holdings</h3>
     <table>
@@ -82,7 +85,10 @@
           <td>{{ holding.coin.name }} ({{ holding.coin.symbol }})</td>
           <td>{{ holding.quantity }}</td>
           <td>{{ holding.current_price|floatformat:2 }} USD</td>
+          <td>{{ holding.average_purchase_price|floatformat:2 }}</td>
           <td>{{ holding.value|floatformat:2 }} USD</td>
+          <td>{{ holding.profit_loss|floatformat:2 }} USD</td>
+          <td>{{ holding.profit_loss_percentage|floatformat:2 }}%</td>
         </tr>
         {% endfor %}
       </tbody>
