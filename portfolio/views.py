@@ -69,22 +69,50 @@ def portfolio_detail(request, portfolio_id):
 
 
 def calculate_profit_loss(holding, trades, current_price):
-    total_quantity = sum(trade.quantity for trade in trades)
-    total_spent = sum(trade.quantity * trade.price for trade in trades)
-    average_purchase_price = total_spent / total_quantity if total_quantity > 0 else 0
+    try:
+        total_quantity = sum(trade.quantity for trade in trades)
+        total_spent = sum(trade.quantity * trade.price for trade in trades)
+        
+        if total_quantity <= 0:
+            raise ValueError("Total quantity is zero or negative, cannot calculate average purchase price.")
+        
+        average_purchase_price = total_spent / total_quantity
 
-    value = holding.quantity * current_price
-    cost = holding.quantity * average_purchase_price
-    profit_loss = value - cost
-    profit_loss_percentage = (profit_loss / cost) * 100 if cost > 0 else 0
+        value = holding.quantity * current_price
+        cost = holding.quantity * average_purchase_price
+        
+        if cost < 0:
+            raise ValueError(f"Unexpected negative cost: {cost}")
+        
+        profit_loss = value - cost
+        profit_loss_percentage = (profit_loss / cost) * 100 if cost > 0 else 0
 
-    return {
-        'average_purchase_price': average_purchase_price,
-        'value': value,
-        'cost': cost,
-        'profit_loss': profit_loss,
-        'profit_loss_percentage': profit_loss_percentage
-    }
+        return {
+            'average_purchase_price': average_purchase_price,
+            'value': value,
+            'cost': cost,
+            'profit_loss': profit_loss,
+            'profit_loss_percentage': profit_loss_percentage
+        }
+    
+    except ZeroDivisionError:
+        return {
+            'average_purchase_price': 0,
+            'value': 0,
+            'cost': 0,
+            'profit_loss': 0,
+            'profit_loss_percentage': 0
+        }
+    except ValueError as e:
+        # Optionally log the error or notify through other means
+        print(f"Error calculating profit/loss: {e}")
+        return {
+            'average_purchase_price': 0,
+            'value': 0,
+            'cost': 0,
+            'profit_loss': 0,
+            'profit_loss_percentage': 0
+        }
 
 
 @login_required
