@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+<h1>Holding Detail for {{ holding.coin.name }} in {{ portfolio.name }}</h1>
+
+<h2>Holding Summary</h2>
+<ul>
+    <li>Coin: {{ holding.coin.name }}</li>
+    <li>Quantity: {{ holding.quantity }}</li>
+    <li>Current Price: {{ holding.coin.current_price|floatformat:2 }} USD</li>
+    <li>Value: {{ profit_loss_data.value }}</li>
+    <li>Average Purchase Price: {{ profit_loss_data.average_purchase_price|floatformat:2 }} USD</li>
+    <li>Profit/Loss: {{ profit_loss_data.profit_loss }}</li>
+    <li>Profit/Loss Percentage: {{ profit_loss_data.profit_loss_percentage|floatformat:2 }}%</li>
+    <li>Holding Period: {{ holding_period }} days</li>
+</ul>
+
+<h2>Trade History</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Trade Type</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for trade in trades %}
+        <tr>
+            <td>{{ trade.date }}</td>
+            <td>{{ trade.trade_type }}</td>
+            <td>{{ trade.quantity }}</td>
+            <td>{{ trade.price }} USD</td>
+            <td>{{ trade.quantity|floatformat:2 }} * {{ trade.price|floatformat:2 }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">No trades found for this holding.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'portfolio_detail' portfolio.id %}">Back to Portfolio</a>
+{% endblock %}
