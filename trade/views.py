@@ -151,16 +151,27 @@ def edit_trade(request, portfolio_id, trade_id):
     return render(request, 'trade/edit_trade.html', {'form': form, 'portfolio': portfolio})
 
 
-def trade_delete(request, trade_id):
-    trade = get_object_or_404(Trade, id=trade_id)
-    
-    if request.method == 'POST':
-        try:
+@login_required
+def delete_trade(request, trade_id):
+    try:
+        # Get the trade and ensure it belongs to the logged-in user
+        trade = get_object_or_404(Trade, id=trade_id)
+        portfolio_id = trade.portfolio.id
+
+        if request.method == 'POST':
+            # Delete the trade
             trade.delete()
             messages.success(request, 'Trade deleted successfully.')
-        except Exception as e:
-            messages.error(request, f'Error deleting trade: {str(e)}')
-    else:
-        messages.error(request, 'Invalid request method.')
-        
-    return redirect('trade_history', portfolio_id=trade.portfolio.id)
+
+            # Determine the redirection target
+            next_page = request.GET.get('next', 'portfolio_detail')
+            return redirect(next_page, portfolio_id=portfolio_id)
+
+    except Exception as e:
+        # Log the error and show a message to the user
+        logger = logging.getLogger(__name__)
+        logger.exception("An error occurred while deleting a trade")
+        messages.error(request, 'An error occurred while deleting the trade. Please try again.')
+
+    # Redirect to the portfolio details page if an error occurs
+    return redirect('portfolio_detail', portfolio_id=portfolio_id)
