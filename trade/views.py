@@ -4,7 +4,6 @@ from .models import Trade
 from .forms import TradeForm
 from portfolio.models import Portfolio
 from holding.models import Holding
-from holding.views import update_holding, reverse_holding, reinstate_holding, edit_holding
 from coin.models import Coin
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
@@ -14,58 +13,54 @@ from django.core.paginator import Paginator
 
 @login_required
 def add_trade(request, portfolio_id):
-    print("Entering add_trade view")  # Add this print statement
+    print("Entering add_trade view")
     
     try:
         portfolio = get_object_or_404(Portfolio, id=portfolio_id)
-        print(f"Portfolio: {portfolio}")  # Add this print statement
+        print(f"Portfolio: {portfolio}")
         
         if request.method == 'POST':
-            print("Request method is POST")  # Add this print statement
+            print("Request method is POST")
             form = TradeForm(request.POST)
             
             if form.is_valid():
-                print("Form is valid")  # Add this print statement
+                print("Form is valid")
                 trade = form.save(commit=False)
                 trade.portfolio = portfolio
                 if not trade.date:
                     trade.date = timezone.now()
-                trade.save()  # Save the trade first
-                print(f"Trade saved: {trade}")  # Add this print statement
-                print(f"Trade type: {trade.trade_type}")  
                 
-                if trade.trade_type == 'BUY':
-                    print("Calling update_holding function for buy trade")  # Add this print statement
-                    update_holding(trade)
-                    print("Returned from update_holding function for buy trade")  # Add this print statement
-                    messages.success(request, 'Buy trade added successfully.')
+                # Temporarily save the trade
+                trade.save()
+                print(f"Trade saved: {trade}")
+                
+                # Calculate the total holdings dynamically
+                trades = Trade.objects.filter(portfolio=portfolio, coin=trade.coin)
+                total_quantity = sum(t.quantity if t.trade_type == 'BUY' else -t.quantity for t in trades)
+                print(f"Calculated total quantity: {total_quantity}")
+                
+                if trade.trade_type == 'SELL' and total_quantity < 0:
+                    print("Insufficient holdings to perform the sell trade.")
+                    messages.error(request, 'Insufficient holdings to perform the sell trade.')
+                    trade.delete()  # Delete the temporarily saved trade
+                else:
+                    messages.success(request, f'{trade.trade_type.capitalize()} trade added successfully.')
                     return redirect('portfolio_detail', portfolio_id=portfolio_id)
-                elif trade.trade_type == 'SELL':
-                    holding = get_object_or_404(Holding, portfolio=portfolio, coin=trade.coin)
-                    if holding.quantity >= trade.quantity:
-                        print("Calling update_holding function for sell trade")  # Add this print statement
-                        update_holding(trade)
-                        print("Returned from update_holding function for sell trade")  # Add this print statement
-                        messages.success(request, 'Sell trade added successfully.')
-                        return redirect('portfolio_detail', portfolio_id=portfolio_id)
-                    else:
-                        messages.error(request, 'Insufficient holdings to perform the sell trade.')
-                        trade.delete()  # Delete the trade if insufficient holdings
             else:
-                print("Form is not valid")  # Add this print statement
-                print(f"Form errors: {form.errors}")  # Add this print statement
+                print("Form is not valid")
+                print(f"Form errors: {form.errors}")
         else:
-            print("Request method is not POST")  # Add this print statement
+            print("Request method is not POST")
             form = TradeForm()
     except Exception as e:
-        print(f"Error in add_trade view: {str(e)}")  # Add this print statement
+        print(f"Error in add_trade view: {str(e)}")
         logger = logging.getLogger(__name__)
         logger.exception("An error occurred while adding a trade")
         messages.error(request, 'An error occurred while adding the trade. Please check your holdings and try again.')
-        trade.delete()  # Delete the trade if insufficient holdings
     
-    print("Exiting add_trade view")  # Add this print statement
+    print("Exiting add_trade view")
     return render(request, 'trade/add_trade.html', {'form': form, 'portfolio': portfolio})
+
 
 @login_required
 def trade_history(request, portfolio_id):
@@ -107,95 +102,53 @@ def trade_history(request, portfolio_id):
 
 
 @login_required
-def trade_edit(request, trade_id):
-    original_trade = get_object_or_404(Trade, id=trade_id)
-    form = TradeForm(request.POST or None, instance=original_trade)
-    temporary_original_trade = None  # Initialize temporary_original_trade to None
+def edit_trade(request, portfolio_id, trade_id):
+    print("Entering edit_trade view")
 
-    if request.method == 'GET':
-        # Create a temporary trade object with the original trade data
-        original_trade_data = {
-            'portfolio': original_trade.portfolio.id,
-            'coin': original_trade.coin.id,
-            'trade_type': original_trade.trade_type,
-            'quantity': original_trade.quantity,
-            'price': original_trade.price,
-            'date': original_trade.date.strftime('%Y-%m-%dT%H:%M:%S')
-        }
-        
-        try:
-            temporary_original_trade_id = update_trade(request, original_trade.portfolio.id, original_trade_data)
-            print(f"Temporary original trade ID: {temporary_original_trade_id}")  # Debug print
-            request.session['temporary_original_trade_id'] = temporary_original_trade_id  # Store the ID in the session
-            temporary_original_trade = get_object_or_404(Trade, id=temporary_original_trade_id)
-            print(f"Temporary original trade: {temporary_original_trade}")  # Debug print
-        except ValueError as e:
-            messages.error(request, str(e))
-            return redirect('trade_history', portfolio_id=original_trade.portfolio.id)
-    
-    if request.method == 'POST':
-        print(f"Form data: {request.POST}")  # Debug print
-        if form.is_valid():
-            updated_trade_data = {
-                'portfolio': original_trade.portfolio,
-                'coin': form.cleaned_data['coin'],
-                'trade_type': form.cleaned_data['trade_type'],
-                'quantity': form.cleaned_data['quantity'],
-                'price': form.cleaned_data['price'],
-                'date': form.cleaned_data['date']
-            }
-            
-            temporary_original_trade_id = request.session.get('temporary_original_trade_id')  # Retrieve the ID from the session
-            temporary_original_trade = get_object_or_404(Trade, id=temporary_original_trade_id)
-            
-            print(f"Original trade: {temporary_original_trade}")  # Debug print
-            print(f"Updated trade data: {updated_trade_data}")  # Debug print
-
-            try:
-                # Perform holding updates
-                reverse_holding(temporary_original_trade)
-                print("Before calling edit_holding")
-                edit_holding(updated_trade_data)
-                print("After calling edit_holding")
-                
-                # Update the original trade object with the edited form data
-                form = TradeForm(updated_trade_data, instance=original_trade)
-                form.save()
-                
-                # Delete the temporary original trade object
-                temporary_original_trade.delete()
-                
-                print("Trade updated successfully")  # Debug print
-                return redirect('trade_history', portfolio_id=original_trade.portfolio.id)
-            except ValueError as e:
-                print(f"ValueError caught: {str(e)}")
-                # Handle the case when edit_holding raises a ValueError
-                messages.error(request, str(e))
-                reinstate_holding(temporary_original_trade)  # Revert the holding quantity back to the original
-                temporary_original_trade.delete()  # Delete the temporary original trade object
-    
-    context = {'form': form, 'trade': original_trade}
-    return render(request, 'trade/trade_edit.html', context)
-
-
-def update_trade(request, portfolio_id, original_trade_data):
-    if request.method == 'GET':
+    try:
         portfolio = get_object_or_404(Portfolio, id=portfolio_id)
-        form = TradeForm(original_trade_data)
-        
-        if form.is_valid():
-            trade = form.save(commit=False)
-            trade.portfolio = portfolio
-            trade.user = request.user
-            trade.save()
+        trade = get_object_or_404(Trade, id=trade_id, portfolio=portfolio)
+        print(f"Editing trade: {trade}")
+
+        if request.method == 'POST':
+            print("Request method is POST")
+            form = TradeForm(request.POST, instance=trade)
             
-            print(f"Trade saved: {trade.trade_type} {trade.quantity} {trade.coin.symbol} at {trade.price}")  # Debug print
-            
-            return trade.id  # Return the trade ID directly
+            if form.is_valid():
+                print("Form is valid")
+                updated_trade = form.save(commit=False)
+                updated_trade.portfolio = portfolio
+                
+                # Temporarily save the updated trade to check holdings
+                updated_trade.save()
+                print(f"Updated trade temporarily saved: {updated_trade}")
+
+                # Calculate the total holdings dynamically
+                trades = Trade.objects.filter(portfolio=portfolio, coin=updated_trade.coin)
+                total_quantity = sum(t.quantity if t.trade_type == 'BUY' else -t.quantity for t in trades)
+                print(f"Calculated total quantity: {total_quantity}")
+
+                if updated_trade.trade_type == 'SELL' and total_quantity < 0:
+                    print("Insufficient holdings to perform the sell trade.")
+                    messages.error(request, 'Insufficient holdings to perform the sell trade.')
+                    updated_trade.delete()  # Delete the temporarily saved updated trade
+                else:
+                    updated_trade.save()
+                    messages.success(request, f'Trade updated successfully.')
+                    return redirect('portfolio_detail', portfolio_id=portfolio_id)
+            else:
+                print("Form is not valid")
+                print(f"Form errors: {form.errors}")
         else:
-            raise ValueError(form.errors)  # Raise a ValueError with form errors
+            form = TradeForm(instance=trade)
+    except Exception as e:
+        print(f"Error in edit_trade view: {str(e)}")
+        logger = logging.getLogger(__name__)
+        logger.exception("An error occurred while editing a trade")
+        messages.error(request, 'An error occurred while editing the trade. Please check your holdings and try again.')
     
-    raise ValueError('Invalid request method')  # Raise a ValueError for invalid request method
+    print("Exiting edit_trade view")
+    return render(request, 'trade/edit_trade.html', {'form': form, 'portfolio': portfolio})
 
 
 def trade_delete(request, trade_id):
@@ -203,7 +156,6 @@ def trade_delete(request, trade_id):
     
     if request.method == 'POST':
         try:
-            reverse_holding(trade)  # Revert the holding quantity
             trade.delete()
             messages.success(request, 'Trade deleted successfully.')
         except Exception as e:

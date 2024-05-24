@@ -31,64 +31,12 @@ def update_holding(trade):
     print("Exiting update_holding function")  # Add this print statement
 
 
-def reverse_holding(temporary_original_trade):
-    holding = get_object_or_404(Holding, portfolio=temporary_original_trade.portfolio, coin=temporary_original_trade.coin)
-    print(f"Reversing holding for original trade: {temporary_original_trade}")  # Debug print
-    print(f"Initial holding quantity: {holding.quantity}")  # Debug print
-
-    if temporary_original_trade.trade_type == 'BUY':
-        holding.quantity -= temporary_original_trade.quantity
-    elif temporary_original_trade.trade_type == 'SELL':
-        holding.quantity += temporary_original_trade.quantity
-
-    print(f"Updated holding quantity after reversal: {holding.quantity}")  # Debug print
-    holding.save()
-
-
-def reinstate_holding(temporary_original_trade):
-    holding = get_object_or_404(Holding, portfolio=temporary_original_trade.portfolio, coin=temporary_original_trade.coin)
-    print(f"Reinstating holding for original trade: {temporary_original_trade}")  # Debug print
-    print(f"Initial holding quantity: {holding.quantity}")  # Debug print
-
-    if temporary_original_trade.trade_type == 'BUY':
-        holding.quantity += temporary_original_trade.quantity
-    elif temporary_original_trade.trade_type == 'SELL':
-        holding.quantity -= temporary_original_trade.quantity
-
-    print(f"Updated holding quantity after reinstation: {holding.quantity}")  # Debug print
-    holding.save()
-
-
-def edit_holding(updated_trade_data):
-    portfolio = updated_trade_data['portfolio']
-    coin = updated_trade_data['coin']
-
-    try:
-        holding = Holding.objects.get(portfolio=portfolio, coin=coin)
-        print(f"Found holding: {holding.quantity} {coin} in {portfolio}")
-
-        if updated_trade_data['trade_type'] == 'BUY':
-            holding.quantity += Decimal(updated_trade_data['quantity'])
-        elif updated_trade_data['trade_type'] == 'SELL':
-            print(f"Sell trade: Available quantity: {holding.quantity}, Required quantity: {updated_trade_data['quantity']}")
-            if holding.quantity < Decimal(updated_trade_data['quantity']):
-                print("Insufficient funds")
-                raise ValueError(f"Insufficient funds. Available: {holding.quantity}, Required quantity: {updated_trade_data['quantity']}")
-
-            holding.quantity -= Decimal(updated_trade_data['quantity'])
-
-        holding.save()
-        print(f"Saved holding: {holding.quantity} {coin} in {portfolio}")
-    except Holding.DoesNotExist:
-        raise ValueError("Holding not found")
-
-
 @login_required
 def holding_detail(request, holding_id):
     # Retrieve the holding and ensure it belongs to the current user
     holding = get_object_or_404(Holding, id=holding_id, portfolio__user=request.user)
     portfolio = holding.portfolio
-    
+
     # Find the first trade date for this holding's portfolio
     first_trade = Trade.objects.filter(portfolio=holding.portfolio).order_by('date').first()
     first_trade_date = first_trade.date if first_trade else None
@@ -101,9 +49,13 @@ def holding_detail(request, holding_id):
     else:
         holding_period = 0
 
+    # Get all trades related to this holding
+    trades = Trade.objects.filter(holding=holding).order_by('date')
+
     context = {
         'holding': holding,
         'holding_period': holding_period,
-        'portfolio': portfolio
+        'portfolio': portfolio,
+        'trades': trades
     }
     return render(request, 'holding/holding_detail.html', context)
