@@ -41,6 +41,7 @@ def portfolio_detail(request, portfolio_id):
         total_cost += profit_loss_data['cost']
 
         holdings_data.append({
+            'id': holding.id,
             'coin': coin,
             'quantity': holding.quantity,
             'current_price': current_price,

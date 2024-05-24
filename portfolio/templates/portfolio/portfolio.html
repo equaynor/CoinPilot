@@ -81,7 +81,7 @@
       </thead>
       <tbody>
         {% for holding in portfolio_summary.holdings %}
-        <tr class="table-row">
+        <tr class="table-row" onclick="window.location.href='{% url 'holding_detail' holding_id=holding.id %}'">
           <td>{{ holding.coin.name }} ({{ holding.coin.symbol }})</td>
           <td>{{ holding.quantity }}</td>
           <td>{{ holding.current_price|floatformat:2 }} USD</td>
