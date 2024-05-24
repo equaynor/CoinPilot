@@ -1,8 +1,11 @@
-from django.shortcuts import render
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from decimal import Decimal
 from .models import Holding
+from portfolio.models import Portfolio
 from trade.models import Trade
+from portfolio.views import calculate_profit_loss
+from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 
 def update_holding(trade):
     print("Entering update_holding function")  # Add this print statement
@@ -78,3 +81,29 @@ def edit_holding(updated_trade_data):
         print(f"Saved holding: {holding.quantity} {coin} in {portfolio}")
     except Holding.DoesNotExist:
         raise ValueError("Holding not found")
+
+
+@login_required
+def holding_detail(request, holding_id):
+    # Retrieve the holding and ensure it belongs to the current user
+    holding = get_object_or_404(Holding, id=holding_id, portfolio__user=request.user)
+    portfolio = holding.portfolio
+    
+    # Find the first trade date for this holding's portfolio
+    first_trade = Trade.objects.filter(portfolio=holding.portfolio).order_by('date').first()
+    first_trade_date = first_trade.date if first_trade else None
+
+    # Calculate holding period in days
+    if first_trade_date:
+        # Use timezone-aware current time
+        now = timezone.now()
+        holding_period = (now - first_trade_date).days
+    else:
+        holding_period = 0
+
+    context = {
+        'holding': holding,
+        'holding_period': holding_period,
+        'portfolio': portfolio
+    }
+    return render(request, 'holding/holding_detail.html', context)
