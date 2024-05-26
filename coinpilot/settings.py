@@ -189,6 +189,18 @@ LOGIN_REDIRECT_URL = '/portfolio/'
 LOGOUT_REDIRECT_URL = '/'
 
 
+# Session Setup
+
+# Set session to expire after 5 minutes of inactivity
+SESSION_COOKIE_AGE = 300  # 5 minutes in seconds
+
+# Ensure session is expired on browser close
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# Optionally, make sessions persistent across browser restarts
+SESSION_SAVE_EVERY_REQUEST = True
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 # https://pypi.org/project/django-cloudinary-storage/#installation
