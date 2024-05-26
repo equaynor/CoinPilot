@@ -3,32 +3,54 @@ from decimal import Decimal
 from .models import Holding
 from portfolio.models import Portfolio
 from trade.models import Trade
-from portfolio.views import calculate_profit_loss
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 
-def update_holding(trade):
-    print("Entering update_holding function")  # Add this print statement
-    
+def calculate_profit_loss(holding, trades, current_price):
     try:
-        holding, created = Holding.objects.get_or_create(portfolio=trade.portfolio, coin=trade.coin, defaults={'quantity': 0})
+        total_quantity = sum(trade.quantity for trade in trades)
+        total_spent = sum(trade.quantity * trade.price for trade in trades)
         
-        print(f"Holding: {holding}")  # Add this print statement
-        print(f"Created: {created}")  # Add this print statement
+        if total_quantity <= 0:
+            raise ValueError("Total quantity is zero or negative, cannot calculate average purchase price.")
         
-        if trade.trade_type == 'BUY':
-            holding.quantity += trade.quantity
-            print(f"Updated holding quantity after buy: {holding.quantity}")  # Add this print statement
-        elif trade.trade_type == 'SELL':
-            holding.quantity -= trade.quantity
-            print(f"Updated holding quantity after sell: {holding.quantity}")  # Add this print statement
+        average_purchase_price = total_spent / total_quantity
+
+        value = holding.quantity * current_price
+        cost = holding.quantity * average_purchase_price
         
-        holding.save()
-        print("Holding saved")  # Add this print statement
-    except Exception as e:
-        print(f"Error in update_holding function: {str(e)}")  # Add this print statement
+        if cost < 0:
+            raise ValueError(f"Unexpected negative cost: {cost}")
+        
+        profit_loss = value - cost
+        profit_loss_percentage = (profit_loss / cost) * 100 if cost > 0 else 0
+
+        return {
+            'average_purchase_price': average_purchase_price,
+            'value': value,
+            'cost': cost,
+            'profit_loss': profit_loss,
+            'profit_loss_percentage': profit_loss_percentage
+        }
     
-    print("Exiting update_holding function")  # Add this print statement
+    except ZeroDivisionError:
+        return {
+            'average_purchase_price': 0,
+            'value': 0,
+            'cost': 0,
+            'profit_loss': 0,
+            'profit_loss_percentage': 0
+        }
+    except ValueError as e:
+        # Optionally log the error or notify through other means
+        print(f"Error calculating profit/loss: {e}")
+        return {
+            'average_purchase_price': 0,
+            'value': 0,
+            'cost': 0,
+            'profit_loss': 0,
+            'profit_loss_percentage': 0
+        }
 
 
 @login_required
