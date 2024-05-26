@@ -74,10 +74,16 @@ def holding_detail(request, holding_id):
     # Get all trades related to this holding
     trades = Trade.objects.filter(holding=holding).order_by('date')
 
+
+    # Calculate profit/loss data
+    current_price = holding.coin.current_price
+    profit_loss_data = calculate_profit_loss(holding, trades, current_price)
+
     context = {
         'holding': holding,
         'holding_period': holding_period,
         'portfolio': portfolio,
-        'trades': trades
+        'trades': trades,
+        'profit_loss_data': profit_loss_data
     }
     return render(request, 'holding/holding_detail.html', context)
