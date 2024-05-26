@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Portfolio
 from trade.models import Trade
 from coin.models import Coin
+from holding.views import calculate_profit_loss
 from django.db.models import Q
 from django.core.cache import cache
 from django.contrib.auth.decorators import login_required
@@ -32,7 +33,7 @@ def portfolio_detail(request, portfolio_id):
 
     for holding in holdings:
         coin = holding.coin
-        trades = Trade.objects.filter(portfolio=portfolio, coin=coin, trade_type='BUY')
+        trades = holding.related_trades.filter(trade_type='BUY')
         current_price = coin.current_price
 
         profit_loss_data = calculate_profit_loss(holding, trades, current_price)
@@ -67,53 +68,6 @@ def portfolio_detail(request, portfolio_id):
         'user_portfolios': user_portfolios,
         'portfolio_summary': portfolio_summary
     })
-
-
-def calculate_profit_loss(holding, trades, current_price):
-    try:
-        total_quantity = sum(trade.quantity for trade in trades)
-        total_spent = sum(trade.quantity * trade.price for trade in trades)
-        
-        if total_quantity <= 0:
-            raise ValueError("Total quantity is zero or negative, cannot calculate average purchase price.")
-        
-        average_purchase_price = total_spent / total_quantity
-
-        value = holding.quantity * current_price
-        cost = holding.quantity * average_purchase_price
-        
-        if cost < 0:
-            raise ValueError(f"Unexpected negative cost: {cost}")
-        
-        profit_loss = value - cost
-        profit_loss_percentage = (profit_loss / cost) * 100 if cost > 0 else 0
-
-        return {
-            'average_purchase_price': average_purchase_price,
-            'value': value,
-            'cost': cost,
-            'profit_loss': profit_loss,
-            'profit_loss_percentage': profit_loss_percentage
-        }
-    
-    except ZeroDivisionError:
-        return {
-            'average_purchase_price': 0,
-            'value': 0,
-            'cost': 0,
-            'profit_loss': 0,
-            'profit_loss_percentage': 0
-        }
-    except ValueError as e:
-        # Optionally log the error or notify through other means
-        print(f"Error calculating profit/loss: {e}")
-        return {
-            'average_purchase_price': 0,
-            'value': 0,
-            'cost': 0,
-            'profit_loss': 0,
-            'profit_loss_percentage': 0
-        }
 
 
 @login_required

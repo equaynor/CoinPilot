@@ -76,7 +76,10 @@
           <th>Cryptocurrency</th>
           <th>Quantity</th>
           <th>Current Price</th>
-          <th>Value</th>
+          <th>Avg. Buy Price</th>
+          <th>Total Value</th>
+          <th>P/L</th>
+          <th>P/L in %</th>
         </tr>
       </thead>
       <tbody>
@@ -85,7 +88,7 @@
           <td>{{ holding.coin.name }} ({{ holding.coin.symbol }})</td>
           <td>{{ holding.quantity }}</td>
           <td>{{ holding.current_price|floatformat:2 }} USD</td>
-          <td>{{ holding.average_purchase_price|floatformat:2 }}</td>
+          <td>{{ holding.average_purchase_price|floatformat:2 }} USD</td>
           <td>{{ holding.value|floatformat:2 }} USD</td>
           <td>{{ holding.profit_loss|floatformat:2 }} USD</td>
           <td>{{ holding.profit_loss_percentage|floatformat:2 }}%</td>
