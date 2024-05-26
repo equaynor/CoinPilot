@@ -17,5 +17,14 @@ class Trade(models.Model):
     price = models.DecimalField(max_digits=18, decimal_places=5, default=0)
     date = models.DateTimeField(default=timezone.now)
 
+    def save(self, *args, **kwargs):
+        if not self.holding:
+            self.holding, created = Holding.objects.get_or_create(
+                portfolio=self.portfolio,
+                coin=self.coin,
+                defaults={'quantity': 0}
+            )
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.trade_type} {self.quantity} {self.coin.symbol} at {self.price}"
