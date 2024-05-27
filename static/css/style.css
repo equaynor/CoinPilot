@@ -1,11 +1,35 @@
 /* style.css */
 
+/* General styles */
 body {
     font-family: 'Roboto', sans-serif;
     background-color: #F8F7F7;
     color: #1D1A24;
 }
 
+a {
+    cursor: pointer;
+    text-decoration: underline;
+    color: #79627B /* Indicates it's clickable */
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #644f66;  /* Change to a darker color on hover */
+}
+
+.btn-primary {
+    background-color: #79627B;
+    border-color: #79627B;
+}
+
+.btn-primary:hover {
+    background-color: #644f66;
+    border-color: #644f66;
+}
+
+
+/* Navbar styles */
 .navbar {
     background-color: #1D1A24;
 }
@@ -31,20 +55,16 @@ body {
     border-color: #644f66;
 }
 
+.secondary-navbar {
+    margin-top: 32px;
+  }
+
 .content-container {
     margin: 56px 20px 0;
 }
 
-.btn-primary {
-    background-color: #79627B;
-    border-color: #79627B;
-}
 
-.btn-primary:hover {
-    background-color: #644f66;
-    border-color: #644f66;
-}
-
+/* Signup form styles */
 .signup-form-container {
     background-color: #1D1A24;
     color: #F8F7F7;
@@ -85,10 +105,16 @@ body {
     color: #79627B !important;
 }
 
+
+/* Portfolio styles */
 .button-container {
     display: flex;
     flex-wrap: wrap;
     align-items: center; /* Vertically align items */
+    background-color: #868B94;
+    width: 100%;
+    height: 56px;
+    margin-top: 32px;
     gap: 10px; /* Adjust the spacing between buttons as needed */
 }
 
@@ -97,8 +123,6 @@ body {
     display: flex;
     justify-content: center; /* Center the button within the div */
 }
-
-/* Portfolio styles */
 
 th, td {
     padding: 10px 20px 10px 0; /* Add space between table rows */
@@ -115,13 +139,19 @@ th, td {
     color: #644f66;  /* Change to a darker color on hover */
 }
 
+.custom-select {
+    -webkit-appearance: menulist-button; /* For Chrome */
+    -moz-appearance: menulist-button;    /* For Firefox */
+    appearance: menulist-button;         /* For other browsers */
+}
+
 .select-container {
     position: relative;
     display: inline-block;
 }
 
 .select-container select {
-    padding-right: 30px; /* Space for the arrow */
+    padding-right: 40px; /* Space for the arrow */
     height: 40px; /* Ensure consistent height */
 }
 

@@ -4,9 +4,59 @@
 
 {% block content %}
 
+<nav class="navbar navbar-expand-lg secondary-navbar">
+  <div class="container">
+    <div class="navbar-nav">
+      <div class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle " href="#" id="portfolioDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Select Portfolio
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="portfolioDropdown">
+          {% for user_portfolio in user_portfolios %}
+          <li>
+            <a class="dropdown-item" href="{% url 'portfolio_detail' portfolio_id=user_portfolio.id %}">
+              {{ user_portfolio.name }}
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <div class="navbar-nav ms-auto">
+      <div class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle btn btn-outline-light" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Actions
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+          <li>
+            <form action="{% url 'add_trade' portfolio_id=portfolio.id %}" method="get" class="d-inline">
+              <button type="submit" class="dropdown-item btn btn-outline-light">Add Trade</button>
+            </form>
+          </li>
+          <li>
+            <form action="{% url 'trade_history' portfolio_id=portfolio.id %}" method="get" class="d-inline">
+              <button type="submit" class="dropdown-item btn btn-outline-light">Trade History</button>
+            </form>
+          </li>
+          <li>
+            <form action="{% url 'coin_list' %}" method="get" class="d-inline">
+              <button type="submit" class="dropdown-item btn btn-outline-light">View Cryptos</button>
+            </form>
+          </li>
+          <li><button type="button" class="dropdown-item btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#createPortfolioModal">Create Portfolio</button></li>
+          <li>
+            <form id="deletePortfolioForm" action="{% url 'delete_portfolio' portfolio_id=portfolio.id %}" method="post" onsubmit="return confirmDeletion();" class="d-inline">
+              {% csrf_token %}
+              <button type="submit" class="dropdown-item btn btn-outline-danger">Delete Portfolio</button>
+            </form>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
 
-<div class="content-container">
-  <h2>Portfolio: {{ portfolio.name }}</h2>
+<div class="container">
 
   <!-- Display Messages -->
   {% if messages %}
@@ -17,54 +67,10 @@
   {% endfor %}
   {% endif %}
 
-  <!-- Buttons -->
-  <div class="button-container">
-    <div>
-      <form action="{% url 'portfolio_detail' portfolio_id=portfolio.id %}" method="get" class="select-container">
-        <div class="form-group">
-          <label for="portfolio_dropdown">Select Portfolio:</label>
-          <select class="form-control" id="portfolio_dropdown" name="portfolio_id" onchange="this.form.submit()">
-            {% for user_portfolio in user_portfolios %}
-            <option value="{{ user_portfolio.id }}" {% if user_portfolio.id == portfolio.id %}selected{% endif %}>
-              {{ user_portfolio.name }}
-            </option>
-            {% endfor %}
-          </select>
-        </div>
-      </form>
-    </div>
-    <div>
-      <form id="deletePortfolioForm" action="{% url 'delete_portfolio' portfolio_id=portfolio.id %}" method="post"
-        onsubmit="return confirmDeletion();">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Delete Portfolio</button>
-      </form>
-    </div>
-    <div>
-      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createPortfolioModal">
-        Create Portfolio
-      </button>
-    </div>
-    <div>
-      <form action="{% url 'add_trade' portfolio_id=portfolio.id %}" method="get">
-        <button type="submit" class="btn btn-primary">Add Trade</button>
-      </form>
-    </div>
-    <div>
-      <form action="{% url 'trade_history' portfolio_id=portfolio.id %}" method="get">
-        <button type="submit" class="btn btn-primary">Trade History</button>
-      </form>
-    </div>
-    <div>
-      <form action="{% url 'coin_list' %}" method="get">
-        <button type="submit" class="btn btn-secondary">View Cryptos</button>
-      </form>
-    </div>
-  </div>
 
   <!-- Portfolio Summary -->
   <div class="portfolio-summary">
-    <h3>Portfolio Summary</h3>
+    <h3>{{ portfolio.name }} Summary</h3>
     <p>Total Value: {{ portfolio_summary.total_value|floatformat:2 }} USD</p>
     <p>Total Cost: {{ portfolio_summary.total_cost|floatformat:2 }} USD</p>
     <p>Overall Profit/Loss: {{ portfolio_summary.overall_profit_loss|floatformat:2 }} USD</p>
