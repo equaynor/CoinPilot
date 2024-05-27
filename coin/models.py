@@ -16,5 +16,9 @@ class Coin(models.Model):
     max_supply = models.DecimalField(max_digits=30, decimal_places=2, null=True)
     categories = models.JSONField(default=list)
 
+    def save(self, *args, **kwargs):
+        self.symbol = self.symbol.upper()
+        super(Coin, self).save(*args, **kwargs)
+        
     def __str__(self):
         return self.name
