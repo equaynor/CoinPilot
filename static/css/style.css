@@ -98,10 +98,21 @@ body {
     justify-content: center; /* Center the button within the div */
 }
 
-
+/* Portfolio styles */
 
 th, td {
     padding: 10px 20px 10px 0; /* Add space between table rows */
+}
+
+.clickable-coin {
+    cursor: pointer;
+    text-decoration: underline;
+    color: #79627B /* Indicates it's clickable */
+}
+
+.clickable-coin:hover {
+    text-decoration: underline;
+    color: #644f66;  /* Change to a darker color on hover */
 }
 
 .select-container {
@@ -117,6 +128,8 @@ th, td {
 .content-container h3 {
     margin-top: 20px; /* Add space above the Portfolio Summary heading */
 }
+
+/* Login styles */
 
 .auth-bg-image {
     background-image: url('https://res.cloudinary.com/dqodpxmad/image/upload/v1712415050/login_bg_c6wc8x.jpg');

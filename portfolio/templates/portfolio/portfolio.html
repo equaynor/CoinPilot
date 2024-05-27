@@ -4,6 +4,7 @@
 
 {% block content %}
 
+
 <div class="content-container">
   <h2>Portfolio: {{ portfolio.name }}</h2>
 
@@ -84,8 +85,10 @@
       </thead>
       <tbody>
         {% for holding in portfolio_summary.holdings %}
-        <tr class="table-row" onclick="window.location.href='{% url 'holding_detail' holding_id=holding.id %}'">
-          <td>{{ holding.coin.name }} ({{ holding.coin.symbol }})</td>
+        <tr class="table-row">
+          <td class="clickable-coin" onclick="window.location.href='{% url 'holding_detail' holding_id=holding.id %}'">
+            {{ holding.coin.name }} ({{ holding.coin.symbol }})
+          </td>
           <td>{{ holding.quantity }}</td>
           <td>{{ holding.current_price|floatformat:2 }} USD</td>
           <td>{{ holding.average_purchase_price|floatformat:2 }} USD</td>
