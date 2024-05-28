@@ -91,17 +91,19 @@
       </thead>
       <tbody>
         {% for holding in portfolio_summary.holdings %}
-        <tr class="table-row">
-          <td class="clickable-coin" onclick="window.location.href='{% url 'holding_detail' holding_id=holding.id %}'">
-            {{ holding.coin.name }} ({{ holding.coin.symbol }})
-          </td>
-          <td>{{ holding.quantity }}</td>
-          <td>{{ holding.current_price|floatformat:2 }} USD</td>
-          <td>{{ holding.average_purchase_price|floatformat:2 }} USD</td>
-          <td>{{ holding.value|floatformat:2 }} USD</td>
-          <td>{{ holding.profit_loss|floatformat:2 }} USD</td>
-          <td>{{ holding.profit_loss_percentage|floatformat:2 }}%</td>
-        </tr>
+          {% if holding.quantity > 0 %}
+            <tr class="table-row">
+              <td class="clickable-coin" onclick="window.location.href='{% url 'holding_detail' holding_id=holding.id %}'">
+                {{ holding.coin.name }} ({{ holding.coin.symbol }})
+              </td>
+              <td>{{ holding.quantity }}</td>
+              <td>{{ holding.current_price|floatformat:2 }} USD</td>
+              <td>{{ holding.average_purchase_price|floatformat:2 }} USD</td>
+              <td>{{ holding.value|floatformat:2 }} USD</td>
+              <td>{{ holding.profit_loss|floatformat:2 }} USD</td>
+              <td>{{ holding.profit_loss_percentage|floatformat:2 }}%</td>
+            </tr>
+          {% endif %}
         {% endfor %}
       </tbody>
     </table>

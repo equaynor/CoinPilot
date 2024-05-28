@@ -149,10 +149,7 @@ def edit_trade(request, portfolio_id, trade_id):
                     # Update the holding
                     holding = get_object_or_404(Holding, portfolio=portfolio, coin=updated_trade.coin)
                     holding.quantity = total_quantity
-                    if holding.quantity == 0:
-                        holding.delete()
-                    else:
-                        holding.save()
+                    holding.save()
 
                     messages.success(request, f'Trade updated successfully.')
 

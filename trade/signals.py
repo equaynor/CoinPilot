@@ -15,10 +15,7 @@ def update_holding_quantity(sender, instance, **kwargs):
     elif instance.trade_type == 'SELL':
         holding.quantity -= instance.quantity
     
-    if holding.quantity == 0:
-        holding.delete()
-    else:
-        holding.save()
+    holding.save()
 
 
 @receiver(post_delete, sender=Trade)
@@ -33,10 +30,7 @@ def handle_trade_deletion(sender, instance, **kwargs):
         elif instance.trade_type == 'SELL':
             holding.quantity += instance.quantity
 
-        # Save the updated holding if quantity is not zero. Otherwise, delete it.
-        if holding.quantity != 0:
-            holding.save()
-        else:
-            holding.delete()
+        holding.save()
+
     except Holding.DoesNotExist:
         pass  # If the holding does not exist, there's nothing to update
