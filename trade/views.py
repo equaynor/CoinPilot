@@ -110,6 +110,11 @@ def edit_trade(request, portfolio_id, trade_id):
         trade = get_object_or_404(Trade, id=trade_id, portfolio=portfolio)
         print(f"Editing trade: {trade}")
 
+        # Store the original trade quantity in the session
+        if 'original_trade_quantity' not in request.session:
+            request.session['original_trade_quantity'] = str(trade.quantity)
+            request.session['original_trade_type'] = trade.trade_type
+
         if request.method == 'POST':
             print("Request method is POST")
             form = TradeForm(request.POST, instance=trade)
@@ -131,10 +136,32 @@ def edit_trade(request, portfolio_id, trade_id):
                 if updated_trade.trade_type == 'SELL' and total_quantity < 0:
                     print("Insufficient holdings to perform the sell trade.")
                     messages.error(request, 'Insufficient holdings to perform the sell trade.')
-                    updated_trade.delete()  # Delete the temporarily saved updated trade
-                else:
+                    
+                    # Revert to the original trade quantity
+                    updated_trade.quantity = decimal.Decimal(request.session['original_trade_quantity'])
+                    updated_trade.trade_type = request.session['original_trade_type']
                     updated_trade.save()
+
+                    # Clear the session data
+                    del request.session['original_trade_quantity']
+                    del request.session['original_trade_type']
+                else:
+                    # Update the holding
+                    holding = get_object_or_404(Holding, portfolio=portfolio, coin=updated_trade.coin)
+                    holding.quantity = total_quantity
+                    if holding.quantity == 0:
+                        holding.delete()
+                    else:
+                        holding.save()
+
                     messages.success(request, f'Trade updated successfully.')
+
+                     # Clear the session data
+                    if 'original_trade_quantity' in request.session:
+                        del request.session['original_trade_quantity']
+                    if 'original_trade_type' in request.session:
+                        del request.session['original_trade_type']
+
                     return redirect('portfolio_detail', portfolio_id=portfolio_id)
             else:
                 print("Form is not valid")
