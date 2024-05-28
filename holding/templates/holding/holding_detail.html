@@ -5,22 +5,24 @@
 
 {% block content %}
 
-<div class="content-container">
-    <h1>Holding Detail for {{ holding.coin.name }} in {{ portfolio.name }}</h1>
-
-    <h2>Holding Summary</h2>
+<div class="container">
+    <div class="position-fix">
+        <h2>{{ holding.coin.name }} in {{ portfolio.name }}</h2>
+    </div>
+    
+    <h3>Holding Summary</h3>
     <ul>
-        <li>Coin: {{ holding.coin.name }}</li>
-        <li>Quantity: {{ holding.quantity }}</li>
-        <li>Current Price: {{ holding.coin.current_price|floatformat:2 }} USD</li>
-        <li>Value: {{ profit_loss_data.value|floatformat:2 }} USD</li>
-        <li>Average Purchase Price: {{ profit_loss_data.average_purchase_price|floatformat:2 }} USD</li>
-        <li>Profit/Loss: {{ profit_loss_data.profit_loss|floatformat:2 }} USD</li>
-        <li>Profit/Loss Percentage: {{ profit_loss_data.profit_loss_percentage|floatformat:2 }}%</li>
-        <li>Holding Period: {{ holding_period }} days</li>
+        <li><strong>Coin: {{ holding.coin.name }}</strong></li>
+        <li><strong>Quantity: {{ holding.quantity }}</strong></li>
+        <li><strong>Current Price: {{ holding.coin.current_price|floatformat:2 }} USD</strong></li>
+        <li><strong>Current Value: {{ profit_loss_data.value|floatformat:2 }} USD</strong></li>
+        <li><strong>Average Purchase Price: {{ profit_loss_data.average_purchase_price|floatformat:2 }} USD</strong></li>
+        <li><strong>Profit/Loss: {{ profit_loss_data.profit_loss|floatformat:2 }} USD</strong></li>
+        <li><strong>Profit/Loss Percentage: {{ profit_loss_data.profit_loss_percentage|floatformat:2 }}%</strong></li>
+        <li><strong>Holding Period: {{ holding_period }} days</strong></li>
     </ul>
 
-    <h2>Trade History</h2>
+    <h3>Trade History</h3>
     <table>
         <thead>
             <tr>

@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
+
 {% load static %}
+{% load custom_filters %}
 
 {% block content %}
 <div class="content-container">
@@ -43,13 +45,7 @@
     <button type="submit">Add Trade</button>
   </form>
 
-  {% if messages %}
-  <ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-      {% endfor %}
-  </ul>
-  {% endif %}
+  <a href="{% url 'portfolio_detail' portfolio.id %}">Back to Portfolio</a>
 </div>
 {% endblock %}
 

@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load custom_filters %}
 
 {% block content %}
-<div class="content-container">
+<div class="container">
   <h2>Trade History for Portfolio: {{ portfolio.name }}</h2>
 
   {% if messages %}
   {% for message in messages %}
-  <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" id="successMessage">
+  <div class="alert alert-{{ message.tags }} alert-dismissible fade show role="alert" id="successMessage">
     {{ message }}
   </div>
   {% endfor %}
@@ -37,7 +38,7 @@
     <label for="end_date">End Date:</label>
     <input type="date" name="end_date" id="end_date">
 
-    <button type="submit">Filter</button>
+    <button class="btn btn-primary" type="submit">Filter</button>
   </form>
 
   {% if page_obj %}
@@ -94,7 +95,12 @@
   {% else %}
   <p>No trades found.</p>
   {% endif %}
+  
+  <a href="{% url 'portfolio_detail' portfolio.id %}">Back to Portfolio</a>
+
 </div>
+
+
 {% endblock %}
 
 {% block javascript %}

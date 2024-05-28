@@ -4,11 +4,11 @@
 
 {% block content %}
 
-<nav class="navbar navbar-expand-lg secondary-navbar">
+<nav class="navbar navbar-expand-lg position-fix">
   <div class="container">
     <div class="navbar-nav">
       <div class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle " href="#" id="portfolioDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <a class="nav-link dropdown-toggle btn btn-outline-light" href="#" id="portfolioDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
           Select Portfolio
         </a>
         <ul class="dropdown-menu" aria-labelledby="portfolioDropdown">
@@ -70,7 +70,7 @@
 
   <!-- Portfolio Summary -->
   <div class="portfolio-summary">
-    <h3>{{ portfolio.name }} Summary</h3>
+    <h3>Summary of: {{ portfolio.name }}</h3>
     <p>Total Value: {{ portfolio_summary.total_value|floatformat:2 }} USD</p>
     <p>Total Cost: {{ portfolio_summary.total_cost|floatformat:2 }} USD</p>
     <p>Overall Profit/Loss: {{ portfolio_summary.overall_profit_loss|floatformat:2 }} USD</p>

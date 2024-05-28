@@ -18,6 +18,10 @@ a:hover {
     color: #644f66;  /* Change to a darker color on hover */
 }
 
+.btn {
+    border-radius: 0%;
+}
+
 .btn-primary {
     background-color: #79627B;
     border-color: #79627B;
@@ -26,6 +30,10 @@ a:hover {
 .btn-primary:hover {
     background-color: #644f66;
     border-color: #644f66;
+}
+
+.container h2, h3 {
+    margin-top: 2em; /* Add space above headings */
 }
 
 
@@ -55,7 +63,7 @@ a:hover {
     border-color: #644f66;
 }
 
-.secondary-navbar {
+.position-fix {
     margin-top: 32px;
   }
 
@@ -145,19 +153,7 @@ th, td {
     appearance: menulist-button;         /* For other browsers */
 }
 
-.select-container {
-    position: relative;
-    display: inline-block;
-}
 
-.select-container select {
-    padding-right: 40px; /* Space for the arrow */
-    height: 40px; /* Ensure consistent height */
-}
-
-.content-container h3 {
-    margin-top: 20px; /* Add space above the Portfolio Summary heading */
-}
 
 /* Login styles */
 
