@@ -18,31 +18,41 @@
 
   <form method="post" id="trade-form" class="mt-4">
     {% csrf_token %}
+
     <div class="form-group mb-3">
       <label for="id_coin">Coin:</label>
-      {{ form.coin|add_class:"form-control" }}
+      <select name="coin" id="id_coin" class="form-control container select2">
+        {% for coin in form.fields.coin.queryset %}
+          <option value="{{ coin.id }}">{{ coin.name }}</option>
+        {% endfor %}
+      </select>
       <span class="error" id="coin-error"></span>
     </div>
+
     <div class="form-group mb-3">
       <label for="id_trade_type">Trade Type:</label>
       {{ form.trade_type|add_class:"form-control" }}
       <span class="error" id="trade-type-error"></span>
     </div>
+
     <div class="form-group mb-3">
       <label for="id_quantity">Quantity:</label>
       {{ form.quantity|add_class:"form-control" }}
       <span class="error" id="quantity-error"></span>
     </div>
+
     <div class="form-group mb-3">
       <label for="id_price">Price:</label>
       {{ form.price|add_class:"form-control" }}
       <span class="error" id="price-error"></span>
     </div>
+
     <div class="form-group mb-3">
       <label for="id_date">Date:</label>
       {{ form.date|add_class:"form-control" }}
       <span class="error" id="date-error"></span>
     </div>
+
     <button type="submit" class="btn btn-primary mt-3">Add Trade</button>
   </form>
 
@@ -53,4 +63,5 @@
 {% block javascript %}
 <script src="{% static 'js/trade_form.js' %}"></script>
 <script src="{% static 'js/message.js' %}"></script>
+<script src="{% static 'js/select2.js' %}"></script>
 {% endblock %}
