@@ -2,9 +2,10 @@
 
 {% load static %}
 {% load custom_filters %}
+{% load form_tags %}
 
 {% block content %}
-<div class="content-container">
+<div class="container">
   <h2>Add Trade</h2>
 
   {% if messages %}
@@ -15,37 +16,37 @@
   {% endfor %}
   {% endif %}
 
-  <form method="post" id="trade-form">
+  <form method="post" id="trade-form" class="mt-4">
     {% csrf_token %}
-    <div>
+    <div class="form-group mb-3">
       <label for="id_coin">Coin:</label>
-      {{ form.coin }}
+      {{ form.coin|add_class:"form-control" }}
       <span class="error" id="coin-error"></span>
     </div>
-    <div>
+    <div class="form-group mb-3">
       <label for="id_trade_type">Trade Type:</label>
-      {{ form.trade_type }}
+      {{ form.trade_type|add_class:"form-control" }}
       <span class="error" id="trade-type-error"></span>
     </div>
-    <div>
+    <div class="form-group mb-3">
       <label for="id_quantity">Quantity:</label>
-      {{ form.quantity }}
+      {{ form.quantity|add_class:"form-control" }}
       <span class="error" id="quantity-error"></span>
     </div>
-    <div>
+    <div class="form-group mb-3">
       <label for="id_price">Price:</label>
-      {{ form.price }}
+      {{ form.price|add_class:"form-control" }}
       <span class="error" id="price-error"></span>
     </div>
-    <div>
+    <div class="form-group mb-3">
       <label for="id_date">Date:</label>
-      {{ form.date }}
+      {{ form.date|add_class:"form-control" }}
       <span class="error" id="date-error"></span>
     </div>
-    <button type="submit">Add Trade</button>
+    <button type="submit" class="btn btn-primary mt-3">Add Trade</button>
   </form>
 
-  <a href="{% url 'portfolio_detail' portfolio.id %}">Back to Portfolio</a>
+  <a href="{% url 'portfolio_detail' portfolio.id %}" class="btn btn-secondary mt-3">Back to Portfolio</a>
 </div>
 {% endblock %}
 
