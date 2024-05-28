@@ -43,7 +43,7 @@
                 <td>{{ trade.price }} USD</td>
                 <td>{{ trade.quantity|multiply:trade.price|floatformat:2 }} USD</td>
                 <td>
-                    <a href="{% url 'edit_trade' trade_id=trade.id %}">Edit</a>
+                    <a href="{% url 'edit_trade' portfolio_id=portfolio.id trade_id=trade.id %}">Edit</a>
                     <form action="{% url 'delete_trade' trade_id=trade.id %}?next={{ request.path }}" method="POST" style="display: inline;">
                       {% csrf_token %}
                       <button type="submit" class="btn btn-danger btn-sm"
