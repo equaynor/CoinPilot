@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load custom_filters %}
+{% load form_tags %}
 
 {% block content %}
-<div class="content-container">
-  <h2>Edit Trade Details</h2>
+<div class="container">
+  <h2>Edit Trade</h2>
 
   {% if messages %}
   {% for message in messages %}
@@ -14,33 +16,52 @@
   {% endfor %}
   {% endif %}
 
-  <form method="post">
+  <form method="post" id="trade-form" class="mt-4">
     {% csrf_token %}
-    <div>
-      <label for="coin">Coin:</label>
-      {{ form.coin }}
+
+    <div class="form-group mb-3">
+      <label for="id_coin">Coin:</label>
+      <select name="coin" id="id_coin" class="form-control container select2">
+        {% for coin in form.fields.coin.queryset %}
+          <option value="{{ coin.id }}" {% if coin.id == form.initial.coin.id %}selected{% endif %}>{{ coin.name }}</option>
+        {% endfor %}
+      </select>
+      <span class="error" id="coin-error"></span>
     </div>
-    <div>
-      <label for="trade_type">Trade Type:</label>
-      {{ form.trade_type }}
+
+    <div class="form-group mb-3">
+      <label for="id_trade_type">Trade Type:</label>
+      {{ form.trade_type|add_class:"form-control" }}
+      <span class="error" id="trade-type-error"></span>
     </div>
-    <div>
-      <label for="quantity">Quantity:</label>
-      {{ form.quantity }}
+
+    <div class="form-group mb-3">
+      <label for="id_quantity">Quantity:</label>
+      {{ form.quantity|add_class:"form-control" }}
+      <span class="error" id="quantity-error"></span>
     </div>
-    <div>
-      <label for="price">Price:</label>
-      {{ form.price }}
+
+    <div class="form-group mb-3">
+      <label for="id_price">Price in USD:</label>
+      {{ form.price|add_class:"form-control" }}
+      <span class="error" id="price-error"></span>
     </div>
-    <div>
-      <label for="date">Date:</label>
-      {{ form.date }}
+
+    <div class="form-group mb-3">
+      <label for="id_date">Date:</label>
+      {{ form.date|add_class:"form-control" }}
+      <span class="error" id="date-error"></span>
     </div>
-    <button type="submit">Update Trade</button>
+
+    <button type="submit" class="btn btn-primary mt-3">Update Trade</button>
   </form>
+
+  <a href="{% url 'portfolio_detail' portfolio.id %}" class="btn btn-secondary mt-3">Back to Portfolio</a>
 </div>
 {% endblock %}
 
 {% block javascript %}
-<script src="{% static 'js/home.js' %}"></script>
+<script src="{% static 'js/trade_form.js' %}"></script>
+<script src="{% static 'js/message.js' %}"></script>
+<script src="{% static 'js/select2.js' %}"></script>
 {% endblock %}
