@@ -36,6 +36,10 @@ a:hover {
     margin-top: 2em; /* Add space above headings */
 }
 
+.form-control {
+    border-radius: 0;
+}
+
 
 /* Navbar styles */
 .navbar, footer {
