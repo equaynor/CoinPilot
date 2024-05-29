@@ -38,8 +38,9 @@ a:hover {
 
 
 /* Navbar styles */
-.navbar {
-    background-color: #1D1A24;
+.navbar, footer {
+    background-color: #1D1A24 !important;
+    height: 56px;
 }
 
 .navbar-brand {
@@ -162,11 +163,6 @@ th, td {
     background-size: cover;
     background-position: center;
     min-height: 100vh;
-}
-
-footer {
-    background-color: #1D1A24;
-    color: #F8F7F7;
 }
 
 .modal-backdrop {
