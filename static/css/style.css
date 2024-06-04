@@ -40,6 +40,10 @@ a:hover {
     border-radius: 0;
 }
 
+.card {
+    --bs-card-border-radius: 0 !important;
+}
+
 
 /* Navbar styles */
 .navbar, footer {
@@ -137,6 +141,11 @@ a:hover {
     justify-content: center; /* Center the button within the div */
 }
 
+th {
+    background-color: #1D1A24 !important; 
+    color: #F8F7F7 !important;
+}
+
 th, td {
     padding: 10px 20px 10px 0; /* Add space between table rows */
 }
@@ -175,4 +184,10 @@ th, td {
   
   .modal {
     z-index: 1050 !important;
+  }
+
+  footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
   }
