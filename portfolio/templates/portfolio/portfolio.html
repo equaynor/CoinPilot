@@ -8,7 +8,8 @@
   <div class="container">
     <div class="navbar-nav">
       <div class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle btn btn-outline-light" href="#" id="portfolioDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <a class="nav-link dropdown-toggle btn btn-outline-light" href="#" id="portfolioDropdown" role="button"
+          data-bs-toggle="dropdown" aria-expanded="false">
           Select Portfolio
         </a>
         <ul class="dropdown-menu" aria-labelledby="portfolioDropdown">
@@ -24,7 +25,8 @@
     </div>
     <div class="navbar-nav ms-auto">
       <div class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle btn btn-outline-light" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <a class="nav-link dropdown-toggle btn btn-outline-light" href="#" id="navbarDropdown" role="button"
+          data-bs-toggle="dropdown" aria-expanded="false">
           Actions
         </a>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -43,9 +45,11 @@
               <button type="submit" class="dropdown-item btn btn-outline-light">View Cryptos</button>
             </form>
           </li>
-          <li><button type="button" class="dropdown-item btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#createPortfolioModal">Create Portfolio</button></li>
+          <li><button type="button" class="dropdown-item btn btn-outline-light" data-bs-toggle="modal"
+              data-bs-target="#createPortfolioModal">Create Portfolio</button></li>
           <li>
-            <form id="deletePortfolioForm" action="{% url 'delete_portfolio' portfolio_id=portfolio.id %}" method="post" onsubmit="return confirmDeletion();" class="d-inline">
+            <form id="deletePortfolioForm" action="{% url 'delete_portfolio' portfolio_id=portfolio.id %}" method="post"
+              onsubmit="return confirmDeletion();" class="d-inline">
               {% csrf_token %}
               <button type="submit" class="dropdown-item btn btn-outline-danger">Delete Portfolio</button>
             </form>
@@ -77,36 +81,39 @@
     <p>Overall Profit/Loss (%): {{ portfolio_summary.overall_profit_loss_percentage|floatformat:2 }}%</p>
 
     <h3>Holdings</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Cryptocurrency</th>
-          <th>Quantity</th>
-          <th>Current Price</th>
-          <th>Avg. Buy Price</th>
-          <th>Total Value</th>
-          <th>P/L</th>
-          <th>P/L in %</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for holding in portfolio_summary.holdings %}
+    <div class="table-responsive">
+      <table class="table table-sm table-striped table-hover">
+        <thead>
+          <tr>
+            <th>Cryptocurrency</th>
+            <th>Quantity</th>
+            <th>Current Price</th>
+            <th>Avg. Buy Price</th>
+            <th>Total Value</th>
+            <th>P/L</th>
+            <th>P/L in %</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for holding in portfolio_summary.holdings %}
           {% if holding.quantity > 0 %}
-            <tr class="table-row">
-              <td class="clickable-coin" onclick="window.location.href='{% url 'holding_detail' holding_id=holding.id %}'">
-                {{ holding.coin.name }} ({{ holding.coin.symbol }})
-              </td>
-              <td>{{ holding.quantity }}</td>
-              <td>{{ holding.current_price|floatformat:2 }} USD</td>
-              <td>{{ holding.average_purchase_price|floatformat:2 }} USD</td>
-              <td>{{ holding.value|floatformat:2 }} USD</td>
-              <td>{{ holding.profit_loss|floatformat:2 }} USD</td>
-              <td>{{ holding.profit_loss_percentage|floatformat:2 }}%</td>
-            </tr>
+          <tr class="table-row clickable-coin"
+            onclick="window.location.href='{% url 'holding_detail' holding_id=holding.id %}'">
+            <td>
+              {{ holding.coin.name }} ({{ holding.coin.symbol }})
+            </td>
+            <td>{{ holding.quantity }}</td>
+            <td>{{ holding.current_price|floatformat:2 }} USD</td>
+            <td>{{ holding.average_purchase_price|floatformat:2 }} USD</td>
+            <td>{{ holding.value|floatformat:2 }} USD</td>
+            <td>{{ holding.profit_loss|floatformat:2 }} USD</td>
+            <td>{{ holding.profit_loss_percentage|floatformat:2 }}%</td>
+          </tr>
           {% endif %}
-        {% endfor %}
-      </tbody>
-    </table>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <!-- Create Portfolio Modal -->
