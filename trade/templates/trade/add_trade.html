@@ -5,7 +5,7 @@
 {% load form_tags %}
 
 {% block content %}
-<div class="container">
+<div class="container-fluid">
   <h2>Add Trade</h2>
 
   {% if messages %}
@@ -21,7 +21,7 @@
 
     <div class="form-group mb-3">
       <label for="id_coin">Coin:</label>
-      <select name="coin" id="id_coin" class="form-control container select2">
+      <select name="coin" id="id_coin" class="form-control select2" style="width: 100%;">
         {% for coin in form.fields.coin.queryset %}
           <option value="{{ coin.id }}">{{ coin.name }}</option>
         {% endfor %}
