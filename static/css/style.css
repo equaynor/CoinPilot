@@ -61,6 +61,8 @@ a:hover {
 
 .navbar-nav .nav-link {
     color: #F8F7F7;
+    background-color: #1D1A24;
+    padding-left: 20px;
 }
 
 .navbar-nav .nav-link.active {
@@ -167,7 +169,16 @@ th, td {
     appearance: menulist-button;         /* For other browsers */
 }
 
+/* Form styles */
 
+.form-control-lg {
+    border-radius: 0;
+    padding: .5rem 0;
+}
+
+#id_coin {
+    width: 100%;
+}
 
 /* Login styles */
 
