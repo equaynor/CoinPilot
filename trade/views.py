@@ -164,7 +164,8 @@ def edit_trade(request, portfolio_id, trade_id):
                 print("Form is not valid")
                 print(f"Form errors: {form.errors}")
         else:
-            form = TradeForm(instance=trade)
+            # Set the initial value of the coin field to the Coin object
+            form = TradeForm(instance=trade, initial={'coin': trade.coin})
     except Exception as e:
         print(f"Error in edit_trade view: {str(e)}")
         logger = logging.getLogger(__name__)
