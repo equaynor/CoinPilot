@@ -45,8 +45,14 @@
               <button type="submit" class="dropdown-item btn btn-outline-light">View Cryptos</button>
             </form>
           </li>
-          <li><button type="button" class="dropdown-item btn btn-outline-light" data-bs-toggle="modal"
-              data-bs-target="#createPortfolioModal">Create Portfolio</button></li>
+          <li>
+            <button type="button" class="dropdown-item btn btn-outline-light" data-bs-toggle="modal"
+              data-bs-target="#createPortfolioModal">Create Portfolio</button>
+          </li>
+          <li>
+            <button type="button" class="dropdown-item btn btn-outline-light" data-bs-toggle="modal"
+              data-bs-target="#editPortfolioModal" data-portfolio-id="{{ portfolio.id }}">Edit Portfolio</button>
+          </li>
           <li>
             <form id="deletePortfolioForm" action="{% url 'delete_portfolio' portfolio_id=portfolio.id %}" method="post"
               onsubmit="return confirmDeletion();" class="d-inline">
@@ -141,6 +147,32 @@
       </div>
     </div>
   </div>
+
+  <!-- Edit Portfolio Modal -->
+  <div class="modal fade" id="editPortfolioModal" tabindex="-1" role="dialog"
+    aria-labelledby="editPortfolioModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editPortfolioModalLabel">Edit Portfolio</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="editPortfolioForm" data-portfolio-id="{{ portfolio.id }}">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="name">New Portfolio Name:</label>
+              <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="editPortfolioBtn">Update Portfolio</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock %}
@@ -148,6 +180,7 @@
 {% block javascript %}
 <script src="{% static 'js/message.js' %}"></script>
 <script src="{% static 'js/create_portfolio.js' %}"></script>
+<script src="{% static 'js/edit_portfolio.js' %}"></script>
 <script src="{% static 'js/portfolio_selector.js' %}"></script>
 <script src="{% static 'js/delete_portfolio.js' %}"></script>
 <script src="{% static 'js/auto_refresh.js' %}"></script>

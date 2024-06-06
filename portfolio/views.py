@@ -17,7 +17,7 @@ def portfolio_redirect(request):
         return redirect('portfolio_detail', portfolio_id=portfolio.id)
     else:
         # Create a new portfolio for the user
-        new_portfolio = Portfolio.objects.create(user=request.user, name='My Portfolio')
+        new_portfolio = Portfolio.objects.create(user=request.user, name='Default Portfolio')
         return redirect('portfolio_detail', portfolio_id=new_portfolio.id)
 
 
@@ -77,6 +77,19 @@ def create_portfolio(request):
         if name:
             portfolio = Portfolio.objects.create(user=request.user, name=name)
             messages.success(request, f"Portfolio '{portfolio.name}' created successfully!")
+            return JsonResponse({'status': 'success', 'portfolio_id': portfolio.id})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+
+
+@login_required
+def edit_portfolio(request, portfolio_id):
+    portfolio = get_object_or_404(Portfolio, id=portfolio_id, user=request.user)
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        if name:
+            portfolio.name = name
+            portfolio.save()
+            messages.success(request, f"Portfolio '{portfolio.name}' updated successfully!")
             return JsonResponse({'status': 'success', 'portfolio_id': portfolio.id})
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
 
