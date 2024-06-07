@@ -17,6 +17,13 @@ def home(request):
     return render(request, 'index.html')
 
 
+def about(request):
+    """
+    Render the about page template.
+    """
+    return render(request, 'home/about.html')
+
+
 class CustomSignupView(SignupView):
     """
     Custom signup view that displays a success message and redirects to the homepage.
