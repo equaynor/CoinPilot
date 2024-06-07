@@ -9,14 +9,15 @@
     <div class="position-fix">
         <h2>{{ holding.coin.name }} in {{ portfolio.name }}</h2>
     </div>
-    
+
     <h3>Holding Summary</h3>
     <ul>
         <li><strong>Coin: {{ holding.coin.name }}</strong></li>
         <li><strong>Quantity: {{ holding.quantity }}</strong></li>
         <li><strong>Current Price: {{ holding.coin.current_price|floatformat:2 }} USD</strong></li>
         <li><strong>Current Value: {{ profit_loss_data.value|floatformat:2 }} USD</strong></li>
-        <li><strong>Average Purchase Price: {{ profit_loss_data.average_purchase_price|floatformat:2 }} USD</strong></li>
+        <li><strong>Average Purchase Price: {{ profit_loss_data.average_purchase_price|floatformat:2 }} USD</strong>
+        </li>
         <li><strong>Profit/Loss: {{ profit_loss_data.profit_loss|floatformat:2 }} USD</strong></li>
         <li><strong>Profit/Loss Percentage: {{ profit_loss_data.profit_loss_percentage|floatformat:2 }}%</strong></li>
         <li><strong>Holding Period: {{ holding_period }} days</strong></li>
@@ -44,12 +45,13 @@
                 <td>{{ trade.quantity|multiply:trade.price|floatformat:2 }} USD</td>
                 <td>
                     <a href="{% url 'edit_trade' portfolio_id=portfolio.id trade_id=trade.id %}">Edit</a>
-                    <form action="{% url 'delete_trade' trade_id=trade.id %}?next={{ request.path }}" method="POST" style="display: inline;">
-                      {% csrf_token %}
-                      <button type="submit" class="btn btn-danger btn-sm"
-                        onclick="return confirm('Are you sure you want to delete this trade?')">Delete</button>
+                    <form action="{% url 'delete_trade' trade_id=trade.id %}?next={{ request.path }}" method="POST"
+                        style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm"
+                            onclick="return confirm('Are you sure you want to delete this trade?')">Delete</button>
                     </form>
-                  </td>
+                </td>
             </tr>
             {% empty %}
             <tr>

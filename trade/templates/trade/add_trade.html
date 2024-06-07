@@ -23,7 +23,7 @@
       <label for="id_coin">Coin:</label>
       <select name="coin" id="id_coin" class="form-control select2" style="width: 100%;">
         {% for coin in form.fields.coin.queryset %}
-          <option value="{{ coin.id }}">{{ coin.name }}</option>
+        <option value="{{ coin.id }}">{{ coin.name }}</option>
         {% endfor %}
       </select>
       <span class="error" id="coin-error"></span>
