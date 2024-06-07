@@ -74,6 +74,10 @@ a:hover {
     border-color: #644f66;
 }
 
+.navbar-toggler {
+    background-color: #1D1A24;
+}
+
 .position-fix {
     margin-top: 32px;
   }
