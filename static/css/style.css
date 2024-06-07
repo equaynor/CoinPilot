@@ -85,7 +85,7 @@ a:hover {
 /* Home page styles */
 
 .hero-section {
-    background: url('../images/backgrounds/hero-bg.jpg') no-repeat center center;
+    background: url('https://res.cloudinary.com/dqodpxmad/image/upload/v1717736196/static/images/backgrounds/hero-bg.jpg') no-repeat center center;
     background-size: cover;
     margin-top: 2rem;
     min-height: 70vh;
