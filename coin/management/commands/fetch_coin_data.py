@@ -7,6 +7,17 @@ from ...coingecko import CoinGeckoAPI
 
 
 def fetch_coin_data():
+    """
+    Fetches the latest coin data from the CoinGecko API and updates the Coin model.
+
+    This function fetches the latest coin data from the CoinGecko API and updates the Coin model
+    with the new data. It iterates over the coins data and updates the Coin model for each coin.
+    If a coin already exists in the database, it updates the existing coin. If a coin does not exist,
+    it creates a new coin.
+
+    Returns:
+        None. If the coin data cannot be fetched, an error message is printed.
+    """
     try:
         api = CoinGeckoAPI()
         coins_data = api.get_coins_markets()
@@ -16,6 +27,7 @@ def fetch_coin_data():
             return
         else:
             for coin_data in coins_data:
+                # Update or create a new Coin model instance
                 coin, created = Coin.objects.update_or_create(
                     coin_id=coin_data['id'],
                     defaults={

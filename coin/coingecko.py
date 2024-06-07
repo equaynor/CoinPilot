@@ -8,6 +8,23 @@ class CoinGeckoAPI:
         self.api_key = settings.COINGECKO_API
 
     def get_coins_markets(self):
+        """
+        Retrieves the market data for all coins from the CoinGecko API.
+
+        Returns:
+            dict or None: A dictionary containing the market data for all coins if the request is successful.
+                          Returns None if there is an error fetching the data.
+
+        Raises:
+            HTTPError: If there is an error with the HTTP request.
+
+        Notes:
+            - The API key for the CoinGecko API is retrieved from the Django settings module.
+            - The market data is retrieved in USD and sorted by market capitalization in descending order.
+            - The response is paginated with 250 coins per page and only the first page is retrieved.
+            - The sparkline data is not included in the response.
+            - The price change percentage for the last 24 hours is included in the response.
+        """
         url = f"{self.base_url}/coins/markets"
         headers = {
             'Accepts': 'application/json',
