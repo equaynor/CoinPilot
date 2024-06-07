@@ -5,6 +5,11 @@ from holding.models import Holding
 
 @receiver(post_save, sender=Trade)
 def update_holding_quantity(sender, instance, **kwargs):
+    """
+    Updates the quantity of a holding object after a trade is saved.
+    If the trade type is 'BUY', the quantity is increased.
+    If the trade type is 'SELL', the quantity is decreased.
+    """
     holding, created = Holding.objects.get_or_create(
         portfolio=instance.portfolio,
         coin=instance.coin,
@@ -20,6 +25,12 @@ def update_holding_quantity(sender, instance, **kwargs):
 
 @receiver(post_delete, sender=Trade)
 def handle_trade_deletion(sender, instance, **kwargs):
+    """
+    Updates the quantity of a holding object after a trade is deleted.
+    If the trade type is 'BUY', the quantity is decreased.
+    If the trade type is 'SELL', the quantity is increased.
+    If the holding does not exist, there's nothing to update.
+    """
     try:
         holding = Holding.objects.get(
             portfolio=instance.portfolio,

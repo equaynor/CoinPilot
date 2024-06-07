@@ -1,6 +1,9 @@
 from django.db import models
 
 class Coin(models.Model):
+    """
+    Model representing a cryptocurrency.
+    """
     coin_id = models.CharField(max_length=255, unique=True, default='')
     name = models.CharField(max_length=255, default='')
     symbol = models.CharField(max_length=50, default='')
@@ -17,8 +20,14 @@ class Coin(models.Model):
     categories = models.JSONField(default=list)
 
     def save(self, *args, **kwargs):
+        """
+        Saves the Coin instance to the database, converting the symbol to uppercase.
+        """
         self.symbol = self.symbol.upper()
         super(Coin, self).save(*args, **kwargs)
         
     def __str__(self):
+        """
+        Returns a string representation of the Coin instance.
+        """
         return self.name
