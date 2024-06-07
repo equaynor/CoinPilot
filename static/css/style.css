@@ -82,6 +82,44 @@ a:hover {
     margin: 56px 20px 0;
 }
 
+/* Home page styles */
+
+.hero-section {
+    background: url('../images/backgrounds/hero-bg.jpg') no-repeat center center;
+    background-size: cover;
+    margin-top: 2rem;
+    min-height: 70vh;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .hero-section h1 {
+    padding-bottom: 2rem;
+  }
+
+  .features-section h2 {
+    margin-top: 0;
+    margin-bottom: 2rem;
+  }
+
+  .features-section {
+    background-color: #1D1A24;
+    color: #F8F7F7;
+  }
+
+  .features-section i {
+    color: #79627B !important;
+  }
+
+  .cta-section {
+    background-color: #f8f9fa;
+    padding: 3rem 0 6rem 0;
+  }
+
+  .cta-section h2 {
+    margin-top: 0;
+  }
+
 
 /* Signup form styles */
 .signup-form-container {
@@ -154,20 +192,9 @@ th, td {
 
 .clickable-coin {
     cursor: pointer;
-    text-decoration: underline;
-    color: #79627B /* Indicates it's clickable */
+    text-decoration: none;
 }
 
-.clickable-coin:hover {
-    text-decoration: underline;
-    color: #644f66;  /* Change to a darker color on hover */
-}
-
-.custom-select {
-    -webkit-appearance: menulist-button; /* For Chrome */
-    -moz-appearance: menulist-button;    /* For Firefox */
-    appearance: menulist-button;         /* For other browsers */
-}
 
 /* Form styles */
 
@@ -202,3 +229,15 @@ th, td {
     bottom: 0;
     width: 100%;
   }
+
+
+
+/* Media queries */
+
+/* X-Small devices (portrait phones, less than 576px)*/
+@media (max-width: 575.98px) {
+
+    .hero-section {
+        text-align: center;
+    }
+ }
