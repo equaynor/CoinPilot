@@ -181,6 +181,10 @@ a:hover {
     justify-content: center; /* Center the button within the div */
 }
 
+.dropdown-menu {
+    --bs-dropdown-border-radius: 0;
+}
+
 th {
     background-color: #1D1A24 !important; 
     color: #F8F7F7 !important;
