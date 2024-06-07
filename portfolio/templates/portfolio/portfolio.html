@@ -54,10 +54,10 @@
               data-bs-target="#editPortfolioModal" data-portfolio-id="{{ portfolio.id }}">Edit Portfolio</button>
           </li>
           <li>
-            <form id="deletePortfolioForm" action="{% url 'delete_portfolio' portfolio_id=portfolio.id %}" method="post"
-              onsubmit="return confirmDeletion();" class="d-inline">
+            <form id="deletePortfolioForm" action="{% url 'delete_portfolio' portfolio_id=portfolio.id %}" method="post">
               {% csrf_token %}
-              <button type="submit" class="dropdown-item btn btn-outline-danger">Delete Portfolio</button>
+              <button type="submit" class="dropdown-item btn btn-danger"
+                onclick="return confirm('Are you sure you want to delete this portfolio?')">Delete Portfolio</button>
             </form>
           </li>
         </ul>
