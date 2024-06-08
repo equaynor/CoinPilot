@@ -1,39 +1,64 @@
-![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+# CoinPilot
 
-Welcome,
+![CoinPilot Responsive Screenshot](path/to/your/screenshot.png)
 
-This is the Code Institute student template for Codeanywhere. If you are using Gitpod then you need [this template](https://github.com/Code-Institute-Org/gitpod-full-template) instead.  We have preinstalled all of the tools you need to get started. It's perfectly ok to use this template as the basis for your project submissions.
+## Introduction
 
-You can safely delete this README.md file, or change it for your own project. Please do read it at least once, though! It contains some important information about Codeanywhere and the extensions we use. Some of this information has been updated since the video content was created. The last update to this file was: **August 30th, 2023**
+CoinPilot is a crypto portfolio tracker. CoinPilot has been developed as part of the Code Institute's Full-Stack Developer course as my 4th project—focusing on Django and Bootstrap frameworks, database manipulation, and CRUD functionality. It is for educational purposes only.
 
-## Codeanywhere Reminders
+View the live site here: [CoinPilot](#)
 
-To run a frontend (HTML, CSS, Javascript only) application in Codeanywhere, in the terminal, type:
+For Admin access with relevant sign-in information: [CoinPilot Admin](#)
 
-`python3 -m http.server`
+<hr>
 
-A button should appear to click: _Open Preview_ or _Open Browser_.
+## Table of Contents
 
-To run a frontend (HTML, CSS, Javascript only) application in Codeanywhere with no-cache, you can use this alias for `python3 -m http.server`.
+- [CoinPilot](#coinpilot)
+  - [Introduction](#introduction)
+  - [Table of Contents](#table-of-contents)
+  - [Overview](#overview)
+- [UX - User Experience](#ux---user-experience)
+  - [Design Inspiration](#design-inspiration)
+    - [Colour Scheme](#colour-scheme)
+    - [Font](#font)
+- [Project Planning](#project-planning)
+  - [Strategy Plane](#strategy-plane)
+    - [Site Goals](#site-goals)
+  - [Agile Methodologies - Project Management](#agile-methodologies---project-management)
+    - [MoSCoW Prioritization](#moscow-prioritization)
+    - [Sprints](#sprints)
+  - [User Stories](#user-stories)
+    - [Visitor User Stories](#visitor-user-stories)
+    - [Epic - User Profile](#epic---user-profile)
+    - [Epic - Portfolio Management](#epic---portfolio-management)
+    - [Epic - Market Data](#epic---market-data)
+    - [Epic - Alerts](#epic---alerts)
+  - [Scope Plane](#scope-plane)
+  - [Structural Plane](#structural-plane)
+  - [Skeleton \& Surface Planes](#skeleton--surface-planes)
+    - [Wireframes](#wireframes)
+    - [Database Schema - Entity Relationship Diagram](#database-schema---entity-relationship-diagram)
+    - [Security](#security)
+- [Features](#features)
+  - [User View - Registered/Unregistered](#user-view---registeredunregistered)
+  - [CRUD Functionality](#crud-functionality)
+  - [Feature Showcase](#feature-showcase)
+  - [Future Features](#future-features)
+- [Technologies \& Languages Used](#technologies--languages-used)
+  - [Libraries \& Frameworks](#libraries--frameworks)
+  - [Tools \& Programs](#tools--programs)
+- [Testing](#testing)
+- [Deployment](#deployment)
+  - [Connecting to GitHub](#connecting-to-github)
+  - [Django Project Setup](#django-project-setup)
+  - [Cloudinary API](#cloudinary-api)
+  - [Elephant SQL](#elephant-sql)
+  - [Heroku Deployment](#heroku-deployment)
+- [Credits](#credits)
+  - [Code](#code)
+  - [Media](#media)
+    - [Additional Reading/Tutorials/Books/Blogs](#additional-readingtutorialsbooksblogs)
+  - [Acknowledgements](#acknowledgements)
 
-`http_server`
-
-To run a backend Python file, type `python3 app.py`, if your Python file is named `app.py` of course.
-
-A button should appear to click: _Open Preview_ or _Open Browser_.
-
-In Codeanywhere you have superuser security privileges by default. Therefore you do not need to use the `sudo` (superuser do) command in the bash terminal in any of the lessons.
-
-To log into the Heroku toolbelt CLI:
-
-1. Log in to your Heroku account and go to _Account Settings_ in the menu under your avatar.
-2. Scroll down to the _API Key_ and click _Reveal_
-3. Copy the key
-4. In Codeanywhere, from the terminal, run `heroku_config`
-5. Paste in your API key when asked
-
-You can now use the `heroku` CLI program - try running `heroku apps` to confirm it works. This API key is unique and private to you so do not share it. If you accidentally make it public then you can create a new one with _Regenerate API Key_.
-
----
-
-Happy coding!
+  
