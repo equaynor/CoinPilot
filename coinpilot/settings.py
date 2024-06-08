@@ -36,7 +36,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    '8000-equaynor-coinpilot-ylldfbhodau.ws-eu114.gitpod.io',
+    '8000-equaynor-coinpilot-4nnqkq1ib0u.ws-eu114.gitpod.io',
     '.herokuapp.com',]
 
 
