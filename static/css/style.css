@@ -32,7 +32,7 @@ a:hover {
     border-color: #644f66;
 }
 
-.container h2, h3 {
+.container h2, .container h3, .container-xl h2  {
     margin-top: 2em; /* Add space above headings */
 }
 
@@ -222,6 +222,7 @@ th, td {
     background-size: cover;
     background-position: center;
     min-height: 100vh;
+    padding: 2rem;
 }
 
 .modal-backdrop {
@@ -231,13 +232,6 @@ th, td {
   .modal {
     z-index: 1050 !important;
   }
-
-  footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-  }
-
 
 
 /* Media queries */
