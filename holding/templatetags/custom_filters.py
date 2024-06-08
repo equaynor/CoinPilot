@@ -1,7 +1,11 @@
-# your_app/templatetags/custom_filters.py
+"""
+Custom template filters
+"""
+
 from django import template
 
 register = template.Library()
+
 
 @register.filter
 def multiply(value, arg):

@@ -3,6 +3,7 @@ from django.dispatch import receiver
 from .models import Trade
 from holding.models import Holding
 
+
 @receiver(post_save, sender=Trade)
 def update_holding_quantity(sender, instance, **kwargs):
     """
@@ -19,7 +20,7 @@ def update_holding_quantity(sender, instance, **kwargs):
         holding.quantity += instance.quantity
     elif instance.trade_type == 'SELL':
         holding.quantity -= instance.quantity
-    
+
     holding.save()
 
 

@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from allauth.account.views import SignupView
 
+
 class Index(TemplateView):
     """
     View for the homepage.
@@ -26,7 +27,8 @@ def about(request):
 
 class CustomSignupView(SignupView):
     """
-    Custom signup view that displays a success message and redirects to the homepage.
+    Custom signup view that displays a success message
+    and redirects to the homepage.
     """
     def form_valid(self, form):
         """

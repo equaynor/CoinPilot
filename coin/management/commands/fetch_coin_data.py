@@ -8,11 +8,14 @@ from ...coingecko import CoinGeckoAPI
 
 def fetch_coin_data():
     """
-    Fetches the latest coin data from the CoinGecko API and updates the Coin model.
+    Fetches the latest coin data from the CoinGecko API
+    and updates the Coin model.
 
-    This function fetches the latest coin data from the CoinGecko API and updates the Coin model
-    with the new data. It iterates over the coins data and updates the Coin model for each coin.
-    If a coin already exists in the database, it updates the existing coin. If a coin does not exist,
+    This function fetches the latest coin data from the CoinGecko API
+    and updates the Coin model with the new data.
+    It iterates over the coins data and updates the Coin model for each coin.
+    If a coin already exists in the database, it updates the existing coin.
+    If a coin does not exist,
     it creates a new coin.
 
     Returns:
@@ -37,10 +40,12 @@ def fetch_coin_data():
                         'image': coin_data['image'],
                         'market_cap': coin_data['market_cap'],
                         'market_cap_rank': coin_data['market_cap_rank'],
-                        'price_change_percentage_24h': coin_data.get('price_change_percentage_24h_in_currency'),
+                        'price_change_percentage_24h': coin_data.get
+                        ('price_change_percentage_24h_in_currency'),
                         'ath': coin_data['ath'],
                         'ath_date': coin_data.get('ath_date'),
-                        'circulating_supply': coin_data.get('circulating_supply'),
+                        'circulating_supply': coin_data.get
+                        ('circulating_supply'),
                         'total_supply': coin_data.get('total_supply'),
                         'max_supply': coin_data.get('max_supply'),
                         'categories': coin_data.get('categories', []),
@@ -51,7 +56,7 @@ def fetch_coin_data():
 
     except Exception as e:
         print(f'Error fetching coin data: {e}')
-        
+
 
 class Command(BaseCommand):
     help = 'Fetches and updates coin data from the CoinGecko API'
@@ -59,7 +64,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         def run_scheduler():
             scheduler = BackgroundScheduler()
-            scheduler.add_job(fetch_coin_data, 'interval', minutes=5)  # Update coin data every 5 minutes
+            # Update coin data every 5 minutes
+            scheduler.add_job(fetch_coin_data, 'interval', minutes=5)
             scheduler.start()
             print('Coin data fetching started.')
 

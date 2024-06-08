@@ -25,18 +25,18 @@ def add_trade(request, portfolio_id):
     """
     # Print debug message
     print("Entering add_trade view")
-    
+
     try:
         # Get the portfolio object
         portfolio = get_object_or_404(Portfolio, id=portfolio_id)
         print(f"Portfolio: {portfolio}")
-        
+
         if request.method == 'POST':
             # Print debug message
             print("Request method is POST")
             # Create a form instance with the POST data
             form = TradeForm(request.POST)
-            
+
             if form.is_valid():
                 # Print debug message
                 print("Form is valid")
@@ -46,28 +46,41 @@ def add_trade(request, portfolio_id):
                 # Set the trade date to the current date if not provided
                 if not trade.date:
                     trade.date = timezone.now()
-                
+
                 # Temporarily save the trade
                 trade.save()
                 print(f"Trade saved: {trade}")
-                
+
                 # Calculate the total holdings dynamically
-                trades = Trade.objects.filter(portfolio=portfolio, coin=trade.coin)
-                total_quantity = sum(t.quantity if t.trade_type == 'BUY' else -t.quantity for t in trades)
+                trades = Trade.objects.filter(
+                    portfolio=portfolio, coin=trade.coin)
+                total_quantity = sum(
+                    t.quantity if t.trade_type == 'BUY'
+                    else -t.quantity for t in trades)
                 print(f"Calculated total quantity: {total_quantity}")
-                
+
                 if trade.trade_type == 'SELL' and total_quantity < 0:
                     # Print debug message
                     print("Insufficient holdings to perform the sell trade.")
                     # Add an error message to the request
-                    messages.error(request, 'Insufficient holdings to perform the sell trade.')
+                    messages.error(
+                        request,
+                        'Insufficient holdings to perform the sell trade.'
+                    )
                     # Delete the temporarily saved trade
                     trade.delete()
                 else:
                     # Add a success message to the request
-                    messages.success(request, f'{trade.trade_type.capitalize()} trade added successfully.')
+                    messages.success(
+                        request,
+                        f'{trade.trade_type.capitalize()} \
+                        trade added successfully.'
+                    )
                     # Redirect to the portfolio detail page
-                    return redirect('portfolio_detail', portfolio_id=portfolio_id)
+                    return redirect(
+                        'portfolio_detail',
+                        portfolio_id=portfolio_id
+                    )
             else:
                 # Print debug message
                 print("Form is not valid")
@@ -86,12 +99,19 @@ def add_trade(request, portfolio_id):
         # Log the exception
         logger.exception("An error occurred while adding a trade")
         # Add an error message to the request
-        messages.error(request, 'An error occurred while adding the trade. Please check your holdings and try again.')
-    
+        messages.error(
+            request,
+            'An error occurred while adding the trade. \
+            Please check your holdings and try again.')
+
     # Print debug message
     print("Exiting add_trade view")
     # Render the add trade template with the form and the portfolio object
-    return render(request, 'trade/add_trade.html', {'form': form, 'portfolio': portfolio})
+    return render(
+        request,
+        'trade/add_trade.html',
+        {'form': form, 'portfolio': portfolio}
+    )
 
 
 @login_required
@@ -111,7 +131,11 @@ def trade_history(request, portfolio_id):
     """
     try:
         # Get the portfolio object for the given ID
-        portfolio = get_object_or_404(Portfolio, id=portfolio_id, user=request.user)
+        portfolio = get_object_or_404(
+            Portfolio,
+            id=portfolio_id,
+            user=request.user
+        )
         # Get all trades for the portfolio, ordered by date
         trades = Trade.objects.filter(portfolio=portfolio).order_by('-date')
 
@@ -150,7 +174,10 @@ def trade_history(request, portfolio_id):
 
     except Exception as e:
         # Log the error and display a message
-        messages.error(request, f"An error occurred while retrieving the trade history: {str(e)}")
+        messages.error(
+            request,
+            f"An error occurred while retrieving the trade history: {str(e)}"
+        )
         return redirect('portfolio_detail', portfolio_id=portfolio_id)
 
 
@@ -183,28 +210,38 @@ def edit_trade(request, portfolio_id, trade_id):
         if request.method == 'POST':
             print("Request method is POST")
             form = TradeForm(request.POST, instance=trade)
-            
+
             if form.is_valid():
                 print("Form is valid")
                 updated_trade = form.save(commit=False)
                 updated_trade.portfolio = portfolio
-                
+
                 # Temporarily save the updated trade to check holdings
                 updated_trade.save()
                 print(f"Updated trade temporarily saved: {updated_trade}")
 
                 # Calculate the total holdings dynamically
-                trades = Trade.objects.filter(portfolio=portfolio, coin=updated_trade.coin)
-                total_quantity = sum(t.quantity if t.trade_type == 'BUY' else -t.quantity for t in trades)
+                trades = Trade.objects.filter(
+                    portfolio=portfolio,
+                    coin=updated_trade.coin
+                )
+                total_quantity = sum(
+                    t.quantity if t.trade_type == 'BUY'
+                    else -t.quantity for t in trades)
                 print(f"Calculated total quantity: {total_quantity}")
 
                 if updated_trade.trade_type == 'SELL' and total_quantity < 0:
                     print("Insufficient holdings to perform the sell trade.")
-                    messages.error(request, 'Insufficient holdings to perform the sell trade.')
-                    
+                    messages.error(
+                        request,
+                        'Insufficient holdings to perform the sell trade.'
+                    )
+
                     # Revert to the original trade quantity
-                    updated_trade.quantity = decimal.Decimal(request.session['original_trade_quantity'])
-                    updated_trade.trade_type = request.session['original_trade_type']
+                    updated_trade.quantity = decimal.Decimal(
+                        request.session['original_trade_quantity'])
+                    updated_trade.trade_type = request.session[
+                        'original_trade_type']
                     updated_trade.save()
 
                     # Clear the session data
@@ -212,19 +249,26 @@ def edit_trade(request, portfolio_id, trade_id):
                     del request.session['original_trade_type']
                 else:
                     # Update the holding
-                    holding = get_object_or_404(Holding, portfolio=portfolio, coin=updated_trade.coin)
+                    holding = get_object_or_404(
+                        Holding,
+                        portfolio=portfolio,
+                        coin=updated_trade.coin
+                    )
                     holding.quantity = total_quantity
                     holding.save()
 
                     messages.success(request, f'Trade updated successfully.')
 
-                     # Clear the session data
+                    # Clear the session data
                     if 'original_trade_quantity' in request.session:
                         del request.session['original_trade_quantity']
                     if 'original_trade_type' in request.session:
                         del request.session['original_trade_type']
 
-                    return redirect('portfolio_detail', portfolio_id=portfolio_id)
+                    return redirect(
+                        'portfolio_detail',
+                        portfolio_id=portfolio_id
+                    )
             else:
                 print("Form is not valid")
                 print(f"Form errors: {form.errors}")
@@ -235,10 +279,18 @@ def edit_trade(request, portfolio_id, trade_id):
         print(f"Error in edit_trade view: {str(e)}")
         logger = logging.getLogger(__name__)
         logger.exception("An error occurred while editing a trade")
-        messages.error(request, 'An error occurred while editing the trade. Please check your holdings and try again.')
-    
+        messages.error(
+            request,
+            'An error occurred while editing the trade. \
+            Please check your holdings and try again.'
+        )
+
     print("Exiting edit_trade view")
-    return render(request, 'trade/edit_trade.html', {'form': form, 'portfolio': portfolio})
+    return render(
+        request,
+        'trade/edit_trade.html',
+        {'form': form, 'portfolio': portfolio}
+    )
 
 
 @login_required
@@ -251,8 +303,10 @@ def delete_trade(request, trade_id):
         trade_id (int): The ID of the trade to be deleted.
 
     Returns:
-        HttpResponseRedirect: Redirects to the portfolio details page if the trade is deleted successfully.
-                             Redirects to the portfolio details page with an error message if an error occurs.
+        HttpResponseRedirect: Redirects to the portfolio details page
+        if the trade is deleted successfully.
+        Redirects to the portfolio details page
+        with an error message if an error occurs.
     """
     try:
         # Get the trade and ensure it belongs to the logged-in user
@@ -272,7 +326,11 @@ def delete_trade(request, trade_id):
         # Log the error and show a message to the user
         logger = logging.getLogger(__name__)
         logger.exception("An error occurred while deleting a trade")
-        messages.error(request, 'An error occurred while deleting the trade. Please try again.')
+        messages.error(
+            request,
+            'An error occurred while deleting the trade. \
+            Please try again.'
+        )
 
     # Redirect to the portfolio details page if an error occurs
     return redirect('portfolio_detail', portfolio_id=portfolio_id)

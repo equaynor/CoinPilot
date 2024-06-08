@@ -13,21 +13,23 @@ from django.contrib import messages
 @login_required
 def portfolio_redirect(request):
     """
-    Redirect the user to the detail page of their first portfolio or create a new default portfolio.
-    
+    Redirect the user to the detail page of their first portfolio
+    or create a new default portfolio.
+
     Args:
         request (HttpRequest): The HTTP request object.
-        
+
     Returns:
         HttpResponseRedirect: Redirects to the portfolio detail page.
     """
     # Get the user's first portfolio
     portfolio = request.user.portfolios.first()
-    
+
     # If the user has a portfolio, redirect to its detail page
     if portfolio:
         return redirect('portfolio_detail', portfolio_id=portfolio.id)
-    # If the user does not have a portfolio, create a new default portfolio and redirect to its detail page
+    # If the user does not have a portfolio, \
+    # create a new default portfolio and redirect to its detail page
     else:
         # Create a new portfolio for the user
         new_portfolio = Portfolio.objects.create(
@@ -49,27 +51,32 @@ def portfolio_detail(request, portfolio_id):
     Returns:
         HttpResponse: The rendered portfolio detail page.
     """
-    # Retrieve the portfolio object with the given ID and owned by the current user
-    portfolio = get_object_or_404(Portfolio, id=portfolio_id, user=request.user)
-    
+    # Retrieve the portfolio object with the given ID \
+    # and owned by the current user
+    portfolio = get_object_or_404(
+        Portfolio, id=portfolio_id, user=request.user)
+
     # Retrieve all portfolios owned by the current user
     user_portfolios = request.user.portfolios.all()
 
-    # Retrieve all holdings associated with the portfolio and prefetch the related coin objects
+    # Retrieve all holdings associated with the portfolio \
+    # and prefetch the related coin objects
     holdings = portfolio.holdings.all().select_related('coin')
-    
+
     # Initialize variables to store the total value and cost of the portfolio
     holdings_data = []
     total_value = 0
     total_cost = 0
 
-    # Calculate the profit/loss data for each holding and store it in the holdings_data list
+    # Calculate the profit/loss data for each holding \
+    # and store it in the holdings_data list
     for holding in holdings:
         coin = holding.coin
         trades = holding.related_trades.filter(trade_type='BUY')
         current_price = coin.current_price
 
-        profit_loss_data = calculate_profit_loss(holding, trades, current_price)
+        profit_loss_data = calculate_profit_loss(
+            holding, trades, current_price)
 
         total_value += profit_loss_data['value']
         total_cost += profit_loss_data['cost']
@@ -80,14 +87,17 @@ def portfolio_detail(request, portfolio_id):
             'quantity': holding.quantity,
             'current_price': current_price,
             'value': profit_loss_data['value'],
-            'average_purchase_price': profit_loss_data['average_purchase_price'],
+            'average_purchase_price': profit_loss_data[
+                'average_purchase_price'],
             'profit_loss': profit_loss_data['profit_loss'],
-            'profit_loss_percentage': profit_loss_data['profit_loss_percentage']
+            'profit_loss_percentage': profit_loss_data[
+                'profit_loss_percentage']
         })
 
     # Calculate the overall profit/loss and its percentage
     overall_profit_loss = total_value - total_cost
-    overall_profit_loss_percentage = (overall_profit_loss / total_cost) * 100 if total_cost > 0 else 0
+    overall_profit_loss_percentage = (
+        overall_profit_loss / total_cost) * 100 if total_cost > 0 else 0
 
     # Create a dictionary to store the portfolio summary data
     portfolio_summary = {
@@ -98,7 +108,8 @@ def portfolio_detail(request, portfolio_id):
         'overall_profit_loss_percentage': overall_profit_loss_percentage
     }
 
-    # Render the portfolio detail page with the portfolio, user portfolios, and portfolio summary data
+    # Render the portfolio detail page with the portfolio, \
+    # user portfolios, and portfolio summary data
     return render(request, 'portfolio/portfolio.html', {
         'portfolio': portfolio,
         'user_portfolios': user_portfolios,
@@ -115,25 +126,30 @@ def create_portfolio(request):
         request (HttpRequest): The HTTP request object.
 
     Returns:
-        JsonResponse: A JSON response containing the status of the operation and the ID of the created portfolio.
+        JsonResponse: A JSON response containing the status of the operation
+        and the ID of the created portfolio.
     """
     # Check if the request method is POST
     if request.method == 'POST':
         # Get the name of the portfolio from the request data
         name = request.POST.get('name')
-        
-        # If a name is provided, create a new portfolio for the authenticated user
+
+        # If a name is provided, \
+        # create a new portfolio for the authenticated user
         if name:
             portfolio = Portfolio.objects.create(user=request.user, name=name)
-            
+
             # Display a success message
-            messages.success(request, f"Portfolio '{portfolio.name}' created successfully!")
-            
+            messages.success(
+                request, f"Portfolio '{portfolio.name}' created successfully!")
+
             # Return a JSON response with the status and portfolio ID
-            return JsonResponse({'status': 'success', 'portfolio_id': portfolio.id})
-    
+            return JsonResponse(
+                {'status': 'success', 'portfolio_id': portfolio.id})
+
     # If the request method is not POST, return an error response
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+    return JsonResponse(
+        {'status': 'error', 'message': 'Invalid request method'})
 
 
 @login_required
@@ -146,29 +162,35 @@ def edit_portfolio(request, portfolio_id):
         portfolio_id (int): The ID of the portfolio to be edited.
 
     Returns:
-        JsonResponse: A JSON response containing the status of the operation and the ID of the edited portfolio.
+        JsonResponse: A JSON response containing the status of the operation
+        and the ID of the edited portfolio.
     """
-    # Get the portfolio with the specified ID and owned by the authenticated user
-    portfolio = get_object_or_404(Portfolio, id=portfolio_id, user=request.user)
-    
+    # Get the portfolio with the specified ID \
+    # and owned by the authenticated user
+    portfolio = get_object_or_404(
+        Portfolio, id=portfolio_id, user=request.user)
+
     # Check if the request method is POST
     if request.method == 'POST':
         # Get the updated name of the portfolio from the request data
         name = request.POST.get('name')
-        
+
         # If a name is provided, update the portfolio name and save it
         if name:
             portfolio.name = name
             portfolio.save()
-            
+
             # Display a success message
-            messages.success(request, f"Portfolio '{portfolio.name}' updated successfully!")
-            
+            messages.success(
+                request, f"Portfolio '{portfolio.name}' updated successfully!")
+
             # Return a JSON response with the status and portfolio ID
-            return JsonResponse({'status': 'success', 'portfolio_id': portfolio.id})
-    
+            return JsonResponse(
+                {'status': 'success', 'portfolio_id': portfolio.id})
+
     # If the request method is not POST, return an error response
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+    return JsonResponse(
+        {'status': 'error', 'message': 'Invalid request method'})
 
 
 @login_required
@@ -183,30 +205,32 @@ def delete_portfolio(request, portfolio_id):
     Returns:
         HttpResponseRedirect: Redirects to the portfolio redirect page.
     """
-    # Get the portfolio with the specified ID and owned by the authenticated user
-    portfolio = get_object_or_404(Portfolio, id=portfolio_id, user=request.user)
-    
+    # Get the portfolio with the specified ID \
+    # and owned by the authenticated user
+    portfolio = get_object_or_404(
+        Portfolio, id=portfolio_id, user=request.user)
+
     # Check if the request method is POST
     if request.method == 'POST':
         # Delete the portfolio
         portfolio.delete()
-        
+
         # Display a success message
         messages.success(request, "Portfolio deleted successfully.")
-        
+
         # Redirect to the portfolio redirect page
         return redirect('portfolio_redirect')
-    
-    # If the request method is not POST, display an error message and redirect to the portfolio redirect page
+
+    # If the request method is not POST, \
+    # display an error message and redirect to the portfolio redirect page
     messages.error(request, "Invalid request method.")
     return redirect('portfolio_redirect')
 
 
-
-
 def coin_list(request):
     """
-    Retrieves a list of coins from the cache or database based on the query and sort_by parameters
+    Retrieves a list of coins from the cache
+    or database based on the query and sort_by parameters
     in the request.
 
     Args:
@@ -248,12 +272,14 @@ def coin_list(request):
         # Store the coins in the cache with the cache key for 5 minutes
         cache.set(cache_key, coins, timeout=300)
 
-    # Create the context dictionary containing the coins, query, and sort_by parameters
+    # Create the context dictionary containing the coins, \
+    # query, and sort_by parameters
     context = {
         'coins': coins,
         'query': query,
         'sort_by': sort_by
     }
 
-    # Render the HTML response using the portfolio/coin_list.html template and the context dictionary
+    # Render the HTML response using the portfolio/coin_list.html template \
+    # and the context dictionary
     return render(request, 'portfolio/coin_list.html', context)
