@@ -237,10 +237,10 @@ th, td {
 /* Media queries */
 
 
- // X-Small devices (portrait phones, less than 576px)
-// No media query for `xs` since this is the default in Bootstrap
+/* X-Small devices (portrait phones, less than 576px)
+No media query for `xs` since this is the default in Bootstrap */
 
-// Small devices (landscape phones, 576px and up)
+/* Small devices (landscape phones, 576px and up) */
 @media (max-width: 576px) { 
     
     .hero-section {
@@ -248,14 +248,14 @@ th, td {
     }
  }
 
-// Medium devices (tablets, 768px and up)
+/* Medium devices (tablets, 768px and up) */
 @media (max-width: 768px) { }
 
-// Large devices (desktops, 992px and up)
+/* Large devices (desktops, 992px and up) */
 @media (max-width: 992px) { }
 
-// X-Large devices (large desktops, 1200px and up)
+/* X-Large devices (large desktops, 1200px and up) */
 @media (max-width: 1200px) { }
 
-// XX-Large devices (larger desktops, 1400px and up)
+/* XX-Large devices (larger desktops, 1400px and up) */
 @media (max-width: 1400px) { }
