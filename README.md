@@ -629,5 +629,4 @@ The following sites were used to gather the photographic media used in FreeFido:
 - Thank you to my wife and kids for letting me sleep in after long coding nights.
 - Thank you to my mentor Medale Oluwafemi for his positive support, guidance and advice.
 - Huge thanks to my fellow students and friends, and Code Institute's Slack community for keeping positive the energy up.
-- Thanks to my dogs Poe and Indy for being the inspiration for this project, maybe someday I can make Freefido a reality!  
   
