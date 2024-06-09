@@ -27,7 +27,6 @@ For Admin access with relevant sign-in information: [CoinPilot Admin](https://co
     - [Site Goals](#site-goals)
   - [Agile Methodologies - Project Management](#agile-methodologies---project-management)
     - [MoSCoW Prioritization](#moscow-prioritization)
-    - [Sprints](#sprints)
   - [User Stories](#user-stories)
     - [Visitor User Stories](#visitor-user-stories)
     - [Epic - User Profile](#epic---user-profile)
@@ -232,7 +231,7 @@ The wireframes for CoinPilot were created by hand, focusing on simplicity and cl
 **Desktop view for:**
 
 - Home
-- Login
+- Signup
 - Portfolio
 - Coin List
 
@@ -240,22 +239,22 @@ By keeping the wireframes simple, I was able to maintain a clear vision of the e
 
 <details open>
     <summary>Desktop Home Page Wireframe</summary>  
-    <img src="documentation/wireframes/home_desktop.png">  
+    <img src="documentation/wireframes/wireframes.png">  
 </details>
 
 <details>
     <summary>Desktop Login Page Wireframe</summary>  
-    <img src="documentation/wireframes/login_desktop.png">
+    <img src="documentation/wireframes/wireframes.png">
 </details>
 
 <details>
     <summary>Desktop Portfolio Page Wireframe</summary>  
-    <img src="documentation/wireframes/portfolio_desktop.png">
+    <img src="documentation/wireframes/wireframes.png">
 </details>
 
 <details>
     <summary>Desktop Coin List Page Wireframe</summary>  
-    <img src="documentation/wireframes/coin_list_desktop.png">
+    <img src="documentation/wireframes/wireframes.png">
 </details>
 
 Creating these wireframes helped me to visualize the layout and user flow of the application, ensuring that the design remained user-friendly and functional. While I initially planned for more advanced UI elements, focusing on a basic, clean design allowed me to deliver a coherent and usable product.
@@ -346,7 +345,7 @@ By providing full CRUD functionality for key features, CoinPilot ensures that us
 
 **Header/Navigation & Footer**
 
-*For features showcase, screenshots of the features in use were taken on Laptop/iPad Pro/iPhone 12 Pro*
+*For features showcase, screenshots of the features in use were taken on Laptop/Desktop*
 
 <details open>
     <summary>Header & Navigation - All Users (Profile Icon only visible to Registered, Logged-In Users)</summary>  
@@ -443,6 +442,7 @@ Further information is available in the [requirements.txt file](requirements.txt
 - [Perplexity AI](https://www.perplexity.ai/) for breaking down Python concepts and Django documentation into more understandable chunks.
 - [Notion](https://www.notion.so/) for organizing project notes, tasks, and documentation.
 - [Poe](https://poe.com/) for generating and refining text content and ideas.
+- [Convertio](https://convertio.co/) for file conversion to PNG, WEBP.
 
 These tools and programs were instrumental in the development and organization of the CoinPilot project, providing essential support for diagramming, learning, organization, and content creation.
 
