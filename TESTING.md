@@ -97,3 +97,131 @@ All JavaScript files were validated as shown in the screenshots above.
 ![css validation](documentation/testing/css_valid.png)
   
 <hr> 
+
+### Lighthouse Scores
+
+Lighthouse testing was carried out in Incognito mode to achieve the best result. Performance was lower than preferred due to the site being image-heavy. Images used in the site's design were saved in WebP and PNG formats and compressed using [Convertio](https://www.convertio.co) to offer the best chance for a decent performance score. The CDNs used for Bootstrap were also noted in the Lighthouse report as causing issues with performance. This report will be reviewed for future development of CoinPilot to raise this score.
+
+**Desktop**  
+
+![Lighthouse scores desktop](documentation/testing/desktop_lh.png)  
+*Desktop Home Page*
+
+**Mobile**  
+
+![Lighthouse scores mobile](documentation/testing/mobile_lh.png) 
+*Mobile Home Page*
+
+<hr>
+
+## Manual Testing
+
+### User Input/Form Validation
+
+Testing was carried out on desktop using a Chrome browser to ensure all forms take the intended input and process the input appropriately.
+
+| Feature                               | Tested?  | User Input Required            | User Feedback Provided                                                                                   | Pass/Fail | Fix |
+|---------------------------------------|----------|--------------------------------|----------------------------------------------------------------------------------------------------------|-----------|-----|
+| Navbar Logo                           | Yes      | Click                          | Logo takes user to 'Home'.                                                                               | Pass      | -   |
+| Navbar Buttons                          | Yes      | Click                          | Icons take user to intended location (Portfolios, About, Coin List, Login, Signup, Logout).              | Pass      | -   |
+| Footer Icons                          | Yes      | None                           | Footer text displays the current year.                                                                   | Pass      | -   |
+| Portfolio Dropdown                    | Yes      | Click                          | Dropdown allows selection of different portfolios.                                                       | Pass      | -   |
+| Actions Dropdown                      | Yes      | Click                          | Dropdown provides actions like Add Trade, Trade History, Create Portfolio, Edit Portfolio, Delete Portfolio. | Pass      | -   |
+| Create Portfolio Modal                | Yes      | Text input                     | Modal form for creating a new portfolio. 'Please fill out this field' if name is empty.                   | Pass      | -   |
+| Edit Portfolio Modal                  | Yes      | Text input                     | Modal form for editing an existing portfolio. 'Please fill out this field' if name is empty.              | Pass      | -   |
+| Portfolio Summary                     | Yes      | None                           | Displays summary information about the portfolio.                                                        | Pass      | -   |
+| Holdings Table                        | Yes      | Click                          | Displays holdings information. Clicking a row navigates to holding details.                              | Pass      | -   |
+| Success/Error Messages                | Yes      | None                           | Displays messages for user actions.                                                                      | Pass      | -   |
+| Holding Summary                       | Yes      | None                           | Displays detailed information about a specific holding.                                                  | Pass      | -   |
+| Trade History Table                   | Yes      | None                           | Displays the trade history for the selected holding.                                                     | Pass      | -   |
+| Edit Trade Link                       | Yes      | Click                          | Link to edit a specific trade.                                                                           | Pass      | -   |
+| Delete Trade Form                     | Yes      | Click                          | Form to delete a specific trade. 'Are you sure you want to delete this trade?' confirmation.              | Pass      | -   |
+| Back to Portfolio Button              | Yes      | Click                          | Button to navigate back to the portfolio details page.                                                   | Pass      | -   |
+| Hero Section                          | Yes      | None                           | Displays a welcome message and a call-to-action button.                                                  | Pass      | -   |
+| Features Section                      | Yes      | None                           | Displays three features with icons and descriptions.                                                     | Pass      | -   |
+| Call to Action Section                | Yes      | Click                          | Displays a sign-up prompt with a call-to-action button.                                                  | Pass      | -   |
+| Add Trade Form                        | Yes      | Select/Text input              | Form to add a new trade. 'Please fill out this field' if any required fields are empty.                   | Pass      | -   |
+| Edit Trade Form                       | Yes      | Select/Text input              | Form to edit an existing trade. 'Please fill out this field' if any required fields are empty.            | Pass      | -   |
+| Trade History Filters                 | Yes      | Select/Date input              | Filters for coin, trade type, and date range.                                                            | Pass      | -   |
+| Pagination                            | Yes      | Click                          | Pagination controls for the trade history table.                                                         | Pass      | -   |
+
+<hr>
+
+### Testing User Stories
+
+User Stories are documented in the CoinPilot [GitHub Projects Board](https://github.com/users/equaynor/projects/2). User Stories are numbered, with Acceptance Criteria and Tasks detailed within. Testing was carried out on Dev Tools for desktop/tablet/mobile, by creating multiple accounts for test users: CoinPilotTest1, CoinPilotTest2, CoinPilotTest3, etc., and ensuring that the Acceptance Criteria were met. All features were tested to ensure that they provided the user with the expected output and action.
+
+| User Story                                     | Acceptance Criteria Met? | Tested | Response  | Pass/Fail | Fix |
+|------------------------------------------------|--------------------------|--------|-----------|-----------|-----|
+| User Authentication and Authorization: Register | Yes                      | Yes    | No issues | Pass      | -   |
+| User Authentication and Authorization: Login    | Yes                      | Yes    | No issues | Pass      | -   |
+| User Authentication and Authorization: Logout   | Yes                      | Yes    | No issues | Pass      | -   |
+| Admin: Manage User Accounts                     | No                       | No     |     -     | Fail      | -   |
+| Admin: Assign Roles                             | No                       | No     |     -     | Fail      | -   |
+| View Supported Cryptocurrencies                 | Yes                      | Yes    | No issues | Pass      | -   |
+| Admin: Add/Remove Cryptocurrencies              | No                       | No     |     -     | Fail      | -   |
+| Create Portfolio                                | Yes                      | Yes    | No issues | Pass      | -   |
+| View Portfolio Summary                          | Yes                      | Yes    | No issues | Pass      | -   |
+| View Profit/Loss for Holdings and Portfolio     | Yes                      | Yes    | No issues | Pass      | -   |
+| Update Portfolio Details                        | Yes                      | Yes    | No issues | Pass      | -   |
+| Delete Portfolio                                | Yes                      | Yes    | No issues | Pass      | -   |
+| View Holding Details                            | Yes                      | Yes    | No issues | Pass      | -   |
+| Add Trade                                       | Yes                      | Yes    | No issues | Pass      | -   |
+| View Trade History                              | Yes                      | Yes    | No issues | Pass      | -   |
+| Update Trade Details                            | Yes                      | Yes    | No issues | Pass      | -   |
+| Delete Trade                                    | Yes                      | Yes    | No issues | Pass      | -   |
+| View Profit/Loss for Trades and Portfolio       | Yes                      | Yes    | No issues | Pass      | -   |
+| Visually Appealing and Responsive UI            | Yes                      | Yes    | No issues | Pass      | -   |
+| View Charts and Visualizations                  | No                       | No     |     -     | Fail      | -   |
+| Access Cryptocurrency Market Data               | Yes                      | Yes    | No issues | Pass      | -   |
+
+<hr>
+
+### Dev Tools/Real World Device Testing
+
+Responsiveness testing was carried out using Google Dev Tools on the devices detailed within the below table. Responsiveness was evident on all features throughout all tested devices. Occassionally I would have to refresh the page by clicking the 'FreeFido' logo as the page would load zoomed in or out on the simualted device. When refreshed and CSS checked the desired outcome was observed. I put this down to a caching issue in Chrome as this issue was not observed when testing on the available real world devices.
+
+**Dev Tools Device Testing - all features tested, issues noted below**
+| Device  | Feature    | Issue  | Fix  |
+| ------- | ---------- | ------ |------|
+| iPhone 4 |  All features | No issues | None needed |
+| iPhone12 Pro | All features | No issues | None needed |
+| Samsung Galaxy A51 | All features | No issues | None needed |
+| iPad Pro | All features | No issues | None needed |
+
+**Real World Device Testing**
+| Device  | Feature    | Issue  | Fix  |
+| ------- | ---------- | ------ |------|
+| Samsung Galaxy S24 | Navbar Toggler | Toggler moved below Navbar | no fix |
+| Samsung Galaxy S22 | Navbar Toggler | Toggler moved below Navbar | no fix |
+| Samsung Galaxy Tab S8+ | All features | No issues | None needed |
+
+## Bugs
+
+As this was my first Django/Database project, most of the bugs that I encountered were learning and teething issues. The below bugs are bugs that I spent a longer length of time investigating or required the assistance of Tutor Support.
+
+| No. | Bug | Solved | Fix | Solution Credit |
+| --- | ---- | ------ | --- | --------------- |
+| 1   | Application error on Heroku | Yes | Updated procfile to say `coinpilot.wsgi` | - |
+| 2   | InconsistentMigrationHistory: Migration `admin.0001_initial` is applied before its dependency `accounts.0001_initial` on database 'default' | Yes | Deleted the migration files and cleared migration history | - |
+| 3   | ProgrammingError: relation `django_content_type` already exists | Yes | Flushed database | - |
+| 4   | ProgrammingError: relation `accounts_customuser` does not exist LINE 1: ..."is_admin", "accounts_customuser"."username" FROM "accounts | Yes | First migrate then create superuser | - |
+| 5   | Couldn’t sign up new users; error with creating new superuser | Yes | Flushed database, used `python manage.py migrate --run-syncdb` to apply all migrations from the beginning, created new superuser successfully, changed site domain in site settings, added username to sign up template | - |
+| 6   | Placeholder text on login/signup not readable | Yes | Adjusted CSS for better readability | - |
+| 7   | Server Error 500 on Coin-List page | Yes | Set up `REDISCLOUD_URL` in .env file | - |
+| 8   | Coin Update management command not being triggered | Yes | Added call command to signal | - |
+| 9   | Management command blocking response leading to 504 | Yes | Added threading to management command | - |
+| 10  | `add_trade` function allowing for selling insufficient holdings | Yes | Exported holding management to holding view and wrote buy & sell strings in all caps, generating temporary trade object | - |
+| 11  | Database overload after running app for too long | No | This issue has only occurred once, monitoring further | - |
+| 12  | Logout success message partly behind navbar | No | Not yet fixed | - |
+| 13  | Error message when filtering dates in trade history | No | Not yet fixed | - |
+| 14  | Navbar Toggler moves below Navbar on small devices | No | Not yet fixed | - |
+
+### Known Bugs
+
+| 1  | Database overload after running app for too long | I went down this rabbithole and did not have time to investigate further.
+| 2  | Logout success message partly behind navbar | Easy fix, but ran out of time
+| 3  | Error message when filtering dates in trade history | Tried setting 'timestamp' to 'date' but that showed no results without error message
+| 4  | Navbar Toggler moves below Navbar on small devices | Easy fix, but ran out of time 
+
+There are currently no other known bugs, if you find one then please do let me know :smile:
